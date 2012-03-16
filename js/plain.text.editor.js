@@ -3,7 +3,7 @@
 * HTML5 Plain Text Editor
 *
 * @author Serj Ryabokon
-* @date March 14, 2012
+* @date March 15, 2012
 */
 
 /**
@@ -39,11 +39,28 @@ plainTextEditor.prototype.setText = function(formattedTxt) {
 }; 
 
 plainTextEditor.prototype.getSelection = function() {
-   return window.getSelection().toString();
+   var userSelection = null;
+   if (window.getSelection) {
+      userSelection = window.getSelection();
+   }
+   else if (document.selection) { // should come last; Opera!
+      userSelection = document.selection.createRange();
+   }
+   return userSelection.toString();
 };
 
-plainTextEditor.prototype.setSelection = function(startPos, selectionLength) {
-  alert("under construction"); 
+plainTextEditor.prototype.setSelection = function(startPos, endPos) {
+  var r = document.createRange();
+  r.setStart(this._el.firstChild, startPos);
+  r.setEnd(this._el.firstChild, endPos);
+  
+  var selection = window.getSelection();
+  if(selection.rangeCount > 0) {
+   selection.removeAllRanges();
+  }
+  
+  selection.addRange(r);
+
 };
 
 plainTextEditor.prototype.getCursorPos = function() {

@@ -37,6 +37,12 @@ $(document).ready(function() {
       alert(
          contentEditor.getSelection()
       );
+   });
+
+   $("#setSelectionBtn").click(function() {
+      var startIndex = prompt("Pleas type a Start index for a new selection");
+      var endIndex = prompt("Pleas type an End index for a new selection");
+      contentEditor.setSelection(startIndex, endIndex);
    });   
    
    $("#undoBtn").click(function() {
