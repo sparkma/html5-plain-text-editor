@@ -1,0 +1,80 @@
+<!doctype html>
+<html>
+<head>
+   <title>HTML5 Plain Text Editor</title>
+   <link rel="stylesheet" href="css/styles.css" />
+   <script src="./js/lib/jquery-1.7.1.min.js"></script>
+   <script src="./js/plain.text.editor.js"></script>
+   <script src="./js/scenario.js"></script>
+   
+   
+</head>
+<body>
+<div id="wrapper">
+
+<h1 id="header">HTML5 plain text editor</h1>
+
+<h2>demo page</h2>
+
+<p class="note">API function calls are binded to the buttons below:</p>
+<input type="button" id="getTextBtn" value="getText" />
+<input type="button" id="setTextBtn" value="setText" />
+<input type="button" id="getSelectionBtn" value="getSelection" />
+<input type="button" id="undoBtn" value="undo" />
+<input type="button" id="redoBtn" value="redo" />
+
+<p>
+Click any <b>paragraph</b> or heading to edit.
+</p>
+
+<p>
+During the click plaint-text-editor attaches to the
+&lt;P&gt; or &lt;H...&gt;.
+</p>
+
+<p>
+After you could simply click any button to test an API.
+</p>
+
+<p>
+The bindings and sample of using are held in file <a target="blank" href="js/scenario.js"><code>js/scenario.js</code><a>
+</p>
+
+<p>
+Actual code is located in <a target="blank" href="js/plain.text.editor.js"><code>js/plain.text.editor.js</code></a>
+</p>
+
+<p>
+I'm trying to keep code fairly simple. Any comments or wishes are welcome.
+</p>
+
+<p>
+Plain text editor uses only contenteditable tag. No designmode applied.
+</p>
+
+<p>
+By the way decorating editor  as jQuery plug-in or 
+in any other way is a simple thing. 
+</p>
+
+<h2>API functions</h2>
+
+<p>
+<b>getText/setText</b> - works after being initialized via click on a paragraph or heading.
+</p>
+
+
+<p>
+<b>getSelection</b> - works after setting a selection over text.
+</p>
+
+
+<p>
+<b>undo/redo</b> - works only for editing - this is a limitation from DOM Range.
+</p>
+
+
+</div>
+
+</body>
+</html>

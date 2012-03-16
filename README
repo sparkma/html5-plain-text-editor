@@ -1,0 +1,10 @@
+HTML5 Plain Text Editor built with contentediable and HTML5 DOM Ranges
+
+Get/Set text
+Set/Get cursor position
+Set/Get selection
+Scroll cursor into view
+Center cursor/selection in view
+Find, Find Next, Find Previous
+Replace, Replace All, Replace in Selection.
+Undo/Redo
