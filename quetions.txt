@@ -1,5 +1,0 @@
-﻿Questions:
-1. Do you allow jQuery dependency?  Or it should be stand-alone from any external lib?
-2. Do you need menu buttons shown (like the one shown in TinyMCE) or only pure JS API?
-3. Which browsers should be supported?
-3. set/getText - should return text only or text with HTML formatting?
