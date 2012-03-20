@@ -2,42 +2,60 @@
 * Executes code after document is fully loaded
 */
 $(document).ready(function() {
-      
-   plainTextEditor.init();
-   plainTextEditor.bindToElem($(".page").get(0));
+   
+   var ptEditor = window.plainTextEditor;
+   
+   ptEditor.init();
+   ptEditor.bindToElem($(".page").get(0));
+   ptEditor.focusEl();
    
    /**
-   * API functions of PlainTextEditor 
+   * API functions of ptEditor 
    * are binded below
    */
    $("#getTextBtn").click(function() {
      alert(
-      plainTextEditor.getText()
+      ptEditor.getText()
      );
+     ptEditor.focusEl();
    });
    
    $("#setTextBtn").click(function() {
-      var txt = prompt("Pleas type a content to put into element below");
-      plainTextEditor.setText(txt);
+      var txt = prompt("Please type a content to put into element below");
+      ptEditor.setText(txt);
    });      
    
    $("#getSelectionBtn").click(function() {
       alert(
-         plainTextEditor.getSelection()
+         ptEditor.getSelection()
       );
+      ptEditor.focusEl();
    });
 
    $("#setSelectionBtn").click(function() {
-      var startIndex = prompt("Pleas type a Start index for a new selection");
-      var endIndex = prompt("Pleas type an End index for a new selection");
-      plainTextEditor.setSelection(startIndex, endIndex);
+      var startIndex = prompt("Please type a Start index for a new selection");
+      var endIndex = prompt("Please type an End index for a new selection");
+      ptEditor.setSelection(startIndex, endIndex);
+      
+   });
+   
+   $("#getCursorPos").click(function() {
+      alert(
+         ptEditor.getCursorPos()
+      );
+      ptEditor.focusEl(); 
+   });   
+    
+   $("#setCursorPos").click(function() {
+      var cursorPos = prompt("Please type a cursor position");
+      ptEditor.setCursorPos( cursorPos );
    });   
    
    $("#undoBtn").click(function() {
-         plainTextEditor.undo();
+         ptEditor.undo();
    });
    
    $("#redoBtn").click(function() {
-         plainTextEditor.redo();
+         ptEditor.redo();
    });
 });

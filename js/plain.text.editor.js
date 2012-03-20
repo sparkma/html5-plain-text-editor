@@ -49,7 +49,7 @@ window.plainTextEditor = {
          if(13 == ev.which) {
             ev.preventDefault();
             
-         }
+         }         
       });
    },
 
@@ -63,6 +63,7 @@ window.plainTextEditor = {
 
    setText: function(formattedTxt) {
       this._elQ.html(formattedTxt);
+      this.focusEl();
    }, 
 
    getSelection: function() {
@@ -77,32 +78,56 @@ window.plainTextEditor = {
    },
 
    setSelection: function(startPos, endPos) {
+     if(startPos > endPos
+         || startPos < 0
+         || endPos > this.getText().length) {
+      return null;
+     }    
+     
      var r = document.createRange();
      r.setStart(this._el.firstChild, startPos);
      r.setEnd(this._el.firstChild, endPos);
      
+     this.clearSelection();
+     
+     var selection = window.getSelection();
+     selection.addRange(r);
+     
+     this.focusEl();
+   },
+   
+   clearSelection: function() {
      var selection = window.getSelection();
      if(selection.rangeCount > 0) {
       selection.removeAllRanges();
      }
-     
-     selection.addRange(r);
-
    },
-
+   
    getCursorPos: function() {
-      alert("under construction"); 
+      this.focusEl();
+      var range = window.getSelection().getRangeAt(0);
+      return range.endOffset;
    },
 
    setCursorPos: function(position) {
-      alert("under construction"); 
+      this.setSelection(position, position);
+      this.focusEl();
+   },
+   
+   insertBeforeCursor: function() {
    },
 
    undo: function(position) {
       document.execCommand("undo", false, null);
+      this.focusEl();
    },
 
    redo: function(position) {
       document.execCommand("Redo", false, null);
+      this.focusEl();
+   },
+   
+   focusEl: function() {
+      this._elQ.focus();
    }
 };

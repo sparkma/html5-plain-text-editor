@@ -57,3 +57,8 @@ input:hover {
    margin-top: 20px;
    width: 540px;
 }
+
+h1 {
+   font-size: 70px;
+   text-align: center;
+}
