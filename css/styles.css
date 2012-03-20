@@ -4,7 +4,7 @@
 }
 
 html {
-   background-image: url('../im/bglines.png');
+   background-color: #f0f0f0;
 }
 
 body, html {
@@ -12,25 +12,17 @@ body, html {
    padding:0;
 }
 
-h1 {
-   font-size: 50px;
-}
-
-h2 {
-   font: italic 21px Baskerville,Georgia,Serif;
-   color: #F3A01E;
-}
-
 input {
    background-color: #B6D3F4;
-   background-image: -moz-linear-gradient(top , #B6D3F4, #5483B8);
-   background-image: -webkit-linear-gradient(top , #B6D3F4, #5483B8);
-   border: 1px solid #9AC9FF;
-   border-radius: 18px 18px 18px 18px;
-   box-shadow: 0 1px 1px #FFFFFF inset, 0 3px 3px rgba(0, 0, 0, 0.6);
-   font: 600 15px/1.4 "myriad-pro-1","myriad-pro-2","Lucida Grande",Sans-Serif;
-   color: white;
-   padding: 7px 15px;
+   background-image: -moz-linear-gradient(top , #f9f9f9, #e3e3e3);
+   background-image: -webkit-linear-gradient(top , #f9f9f9, #e3e3e3);
+   border: 1px solid #808080;
+   border: 1px solid #567394;
+   border-radius: 5px;
+   font: 13px "Lucida Grande",Sans-Serif;
+   color: #567394;
+   color: #567394;
+   padding: 3px 13px;
    margin-bottom: 10px;
    margin-right: 5px;
 }
@@ -39,7 +31,7 @@ input:hover {
    border: 1px solid #F3A01E;
 }
 
-#wrapper {
+.page {
    max-width: 800px;
    box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
    background: white;
@@ -53,18 +45,15 @@ input:hover {
    padding-left: 22px;
    padding-right: 22px;
    min-height: 800px;
-}
-.note {   
-   font-size: 14px;
-   color: grey;
+   white-space: pre;
 }
 
-b {
-   font-weight: bold;
-}
-code {
-
-   font-family: monospace;
-
-   
+#menu {
+   width: auto;
+   padding: 0;
+   margin: 0;
+   margin-left: auto;
+   margin-right: auto;
+   margin-top: 20px;
+   width: 540px;
 }

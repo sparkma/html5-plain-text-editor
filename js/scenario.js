@@ -2,21 +2,9 @@
 * Executes code after document is fully loaded
 */
 $(document).ready(function() {
-   
-   /**
-   * General pointer to the current PlainTextEditor
-   * initialized with particular HTML element
-   */
-   var contentEditor = null;
-   
-   /**
-   * Provides an initialization 
-   * of content editor for paragraph 
-   * or heading
-   */
-   $("p,h1,h2").mousedown(function(ev) {
-      contentEditor = new plainTextEditor(ev.target);
-   });
+      
+   plainTextEditor.init();
+   plainTextEditor.bindToElem($(".page").get(0));
    
    /**
    * API functions of PlainTextEditor 
@@ -24,32 +12,32 @@ $(document).ready(function() {
    */
    $("#getTextBtn").click(function() {
      alert(
-      contentEditor.getText()
+      plainTextEditor.getText()
      );
    });
    
    $("#setTextBtn").click(function() {
       var txt = prompt("Pleas type a content to put into element below");
-      contentEditor.setText(txt);
+      plainTextEditor.setText(txt);
    });      
    
    $("#getSelectionBtn").click(function() {
       alert(
-         contentEditor.getSelection()
+         plainTextEditor.getSelection()
       );
    });
 
    $("#setSelectionBtn").click(function() {
       var startIndex = prompt("Pleas type a Start index for a new selection");
       var endIndex = prompt("Pleas type an End index for a new selection");
-      contentEditor.setSelection(startIndex, endIndex);
+      plainTextEditor.setSelection(startIndex, endIndex);
    });   
    
    $("#undoBtn").click(function() {
-         contentEditor.undo();
+         plainTextEditor.undo();
    });
    
    $("#redoBtn").click(function() {
-         contentEditor.redo();
+         plainTextEditor.redo();
    });
 });
