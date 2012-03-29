@@ -58,4 +58,19 @@ $(document).ready(function() {
    $("#redoBtn").click(function() {
          ptEditor.redo();
    });
+   
+   $("#cutBtn").click(function() {
+         ptEditor.cut();
+         ptEditor.focusEl();
+   });  
+   
+   $("#copyBtn").click(function() {
+         ptEditor.copy();
+         ptEditor.focusEl();
+   });
+   
+   $("#pasteBtn").click(function() {
+         ptEditor.paste();
+         ptEditor.focusEl();
+   });
 });

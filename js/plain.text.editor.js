@@ -36,6 +36,10 @@ window.plainTextEditor = {
       * Turns an element to editable state
       */
       this._elQ.attr("contenteditable", "true");
+      /**
+      * content of clipboard
+      */
+      this._clipboard = "";
    },
    
    /**
@@ -85,8 +89,40 @@ window.plainTextEditor = {
      }    
      
      var r = document.createRange();
-     r.setStart(this._el.firstChild, startPos);
-     r.setEnd(this._el.firstChild, endPos);
+     
+     
+     var startNode = this._el.firstChild;
+     var endNode = this._el.firstChild;
+
+     /**
+     * Checking type of node
+     */
+     var TEXT_NODE = 3;
+     if(startNode.nodeType != TEXT_NODE
+         || endNode.nodeType != TEXT_NODE) {     
+        /**
+        * in case it isn't a text find 
+        * text node from element
+        */
+        var childNodes = this._el.childNodes;
+        var positionCounter = 0;
+        for(var index in childNodes) {
+         
+         var currentNode = childNodes[index];
+         if(currentNode.nodeType == TEXT_NODE) {
+            /**
+            * set correct text node
+            */
+               startNode = currentNode;
+               endNode = currentNode;
+            
+         }      
+        }
+     }
+     
+     
+     r.setStart(startNode, startPos);
+     r.setEnd(endNode, endPos);
      
      this.clearSelection();
      
@@ -114,7 +150,44 @@ window.plainTextEditor = {
       this.focusEl();
    },
    
-   insertBeforeCursor: function() {
+   /**
+   *
+   * There are two strategies to implement
+   * this function: 
+   *
+   *   - first is to insert a new text 
+   *     node into current element, but it will
+   *     produce not an unpleasent result
+   *     while one element holds two or more Text node
+   *     that is inconvenient to use
+   *
+   *   - second (shown below) is simply manipulates
+   *     text content through default String functions,
+   *     this approach allows to keep number of 
+   *     elements Text nodes to only one.
+   *
+   */
+   insertBeforeCursor: function(txt) {
+      /**
+      * find current cursor position,
+      * collapsing the selection if such appears
+      */
+      var range = window.getSelection().getRangeAt(0);      
+      range.collapse(false);
+      var position = range.startOffset;
+      
+      var elVal = this._elQ.text();
+      var newContent = elVal.slice(0, position) 
+                        + txt 
+                        + elVal.slice(position);
+
+      this._elQ.text(newContent);
+
+      /**
+      * setting new cursor position
+      */
+      var newPos = position + txt.length;
+      this.setCursorPos(newPos);
    },
 
    undo: function(position) {
@@ -129,5 +202,23 @@ window.plainTextEditor = {
    
    focusEl: function() {
       this._elQ.focus();
+   },
+   
+   /**
+   * Copies to temporary clipboard
+   * the content of selection
+   */
+   copy: function() {
+      this._clipboard = this.getSelection();
+   },
+   
+   cut: function() {
+      this.copy();
+      this.focusEl();
+      window.getSelection().getRangeAt(0).deleteContents();
+   },
+   
+   paste: function() {
+      this.insertBeforeCursor(this._clipboard);
    }
 };
