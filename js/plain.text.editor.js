@@ -40,6 +40,10 @@ window.plainTextEditor = {
       * content of clipboard
       */
       this._clipboard = "";
+      /**
+      * content of clipboard
+      */
+      this._findTxt = "";      
    },
    
    /**
@@ -220,5 +224,38 @@ window.plainTextEditor = {
    
    paste: function() {
       this.insertBeforeCursor(this._clipboard);
+   },
+   
+   find: function(txt) {
+      this._findTxt = txt;
+   },
+   
+   findNext: function() {
+   },
+   
+   findPrevious: function() {
+   },
+   
+   scrollToCursor: function() {
+      var cursorPos = this.getCursorPos();
+      var id = "tmp_div_to_delete";
+      var tmpEl = document.createElement("span");
+      tmpEl.id = id;
+      var range = window.getSelection().getRangeAt(0);
+      range.insertNode( tmpEl );
+      tmpEl.scrollIntoView();
+      var parentEl = range.startContainer;
+      var childNodes = parentEl.childNodes
+      for( var i in childNodes ) {
+         var c = childNodes[i];
+         if(c.id == id) {
+            parentEl.removeChild(c);
+            break;
+         }
+      }
+      
+      var t = this._elQ.text();
+      this._elQ.text(t);
+      this.setCursorPos(cursorPos);
    }
 };

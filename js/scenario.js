@@ -73,4 +73,9 @@ $(document).ready(function() {
          ptEditor.paste();
          ptEditor.focusEl();
    });
+   
+   $("#scrollToCursorBtn").click(function() {
+         ptEditor.scrollToCursor();
+         ptEditor.focusEl();
+   });   
 });
