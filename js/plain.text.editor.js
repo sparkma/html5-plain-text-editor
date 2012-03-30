@@ -436,7 +436,15 @@ window.plainTextEditor = {
    * content of selection 
    */
    replaceInSel: function(oldtxt, newtxt) {
+      var cp = this.getCursorPos();
       
+      var securedOldTxt = oldtxt.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
+      var regex = new RegExp(securedOldTxt, "gi");
+      var content = this.getSelection();
+      var newContent = content.replace(regex, newtxt);
+      this.setText(newContent);
+      
+      this.setCursorPos(cp);  
    }
    
 };
