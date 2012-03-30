@@ -238,7 +238,7 @@ window.plainTextEditor = {
    
    scrollToCursor: function() {
       var cursorPos = this.getCursorPos();
-      var id = "tmp_div_to_delete";
+      var id = "tmp_span_element_to_delete";
       var tmpEl = document.createElement("span");
       tmpEl.id = id;
       var range = window.getSelection().getRangeAt(0);
