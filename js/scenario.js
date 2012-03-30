@@ -5,7 +5,6 @@ $(document).ready(function() {
    
    var ptEditor = window.plainTextEditor;
    
-   ptEditor.init();
    ptEditor.bindToElem($(".page").get(0));
    ptEditor.focusEl();
    
@@ -96,5 +95,23 @@ $(document).ready(function() {
    $("#findPrevBtn").click(function() {
          ptEditor.findPrev();
    }); 
-
+  
+   $("#replaceBtn").click(function() {
+         var oldTxt = prompt("Please, type target text to found for replacement");
+         var newTxt = prompt("Please, type text to substitue");
+         ptEditor.replace(oldTxt, newTxt);
+   });
+  
+   $("#replaceAllBtn").click(function() {
+         var oldTxt = prompt("Please, type target text to found for replacement");
+         var newTxt = prompt("Please, type text to substitue");
+         ptEditor.replaceAll(oldTxt, newTxt);
+   });
+   
+   $("#repalceInSelBtn").click(function() {
+         var oldTxt = prompt("Please, type target text to found for replacement");
+         var newTxt = prompt("Please, type text to substitue");
+         ptEditor.replaceInSel(oldTxt, newTxt);
+   });
+   
 });

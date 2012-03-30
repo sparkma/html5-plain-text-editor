@@ -23,8 +23,6 @@ input {
    color: #567394;
    color: #567394;
    padding: 3px 13px;
-   margin-bottom: 10px;
-   margin-right: 5px;
 }
 
 input:hover {
@@ -55,11 +53,23 @@ input:hover {
    margin: 0;
    margin-left: auto;
    margin-right: auto;
-   margin-top: 20px;
-   width: 540px;
+   margin-top: 0px;
+   width: 800px;
+   text-align: center;
 }
 
 h1 {
    font-size: 70px;
    text-align: center;
+   margin-bottom: 0;
+}
+
+fieldset {
+   border: 1px solid #808080;
+   border-radius: 4px;
+   display: inline-block;
+   padding: 8px;
+   margin: 0;
+   margin-bottom: 10px;
+   margin-right: 5px;  
 }

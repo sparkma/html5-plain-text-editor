@@ -14,9 +14,11 @@
 window.plainTextEditor = {
    
    /**
+   * initializes PlainTextEditor
    */
    init: function() {
       this.attachDocumentHdlrs();
+      window.plainTextEditorInitialized = true;
    },
    
    /**
@@ -24,6 +26,13 @@ window.plainTextEditor = {
    * particular HTML element
    */
    bindToElem: function(elem) {
+      /**
+      * Checks whether PlainTextEditor is initialized
+      * in case it doesn't triggers the initialization
+      */
+      if(!window.hasOwnProperty('plainTextEditorInitialized')) {
+         this.init();
+      }
       /**
       * Holds DOM elem
       */
@@ -45,7 +54,7 @@ window.plainTextEditor = {
       */      
       this._findTxt = "";
       /**
-      * An offset for findNext
+      * An offset for findNext, findPrev operations
       */
       this._findNext = 0;      
    },
@@ -70,14 +79,31 @@ window.plainTextEditor = {
    * element without HTML formatting
    */
    getText: function() {
-      return this._elQ.text();
+      var cn = this._el.childNodes;
+      var TEXT_NODE = 3;
+      var content = "";
+      for( var i in cn ) {
+         var current = cn[i];
+         if( current.nodeType == TEXT_NODE ) {
+            content += current.nodeValue;
+         }
+      }
+      
+      return content;
    }, 
 
+   /**
+   * Substitutes the content of active element
+   * with a new one passed as an argument
+   */
    setText: function(formattedTxt) {
       this._elQ.html(formattedTxt);
       this.focusEl();
    }, 
 
+   /**
+   * Retrieves the content of current selection
+   */
    getSelection: function() {
       var userSelection = window.getSelection();
       
@@ -98,6 +124,9 @@ window.plainTextEditor = {
       return content;
    },
 
+   /**
+   * Selects a range in a text of active element
+   */
    setSelection: function(startPos, endPos) {
      if(startPos > endPos
          || startPos < 0
@@ -149,6 +178,9 @@ window.plainTextEditor = {
      this.focusEl();
    },
    
+   /**
+   * Removes the selection
+   */
    clearSelection: function() {
      var selection = window.getSelection();
      if(selection.rangeCount > 0) {
@@ -156,12 +188,18 @@ window.plainTextEditor = {
      }
    },
    
+   /**
+   * Gives a position of cursor starting from zero
+   */
    getCursorPos: function() {
       this.focusEl();
       var range = window.getSelection().getRangeAt(0);
       return range.endOffset;
    },
 
+   /**
+   * Set cursor to position, position is calculated from zero
+   */
    setCursorPos: function(position) {
       this.setSelection(position, position);
       this.focusEl();
@@ -207,11 +245,17 @@ window.plainTextEditor = {
       this.setCursorPos(newPos);
    },
 
+   /**
+   * Undo last action. Currently is under construction
+   */
    undo: function(position) {
       document.execCommand("undo", false, null);
       this.focusEl();
    },
 
+   /**
+   * Undo the undo. Currently is under construction.
+   */
    redo: function(position) {
       document.execCommand("Redo", false, null);
       this.focusEl();
@@ -229,16 +273,27 @@ window.plainTextEditor = {
       this._clipboard = this.getSelection();
    },
    
+   /**
+   * Cuts the selected area into clipboard
+   */
    cut: function() {
       this.copy();
       this.focusEl();
       window.getSelection().getRangeAt(0).deleteContents();
    },
    
+   /**
+   * Inserts the content of clipboard to current
+   * cursor position
+   */
    paste: function() {
       this.insertBeforeCursor(this._clipboard);
    },
    
+   /**
+   * Selects first occurence of a string provided as a
+   * an argument 
+   */
    find: function(txt) {
       this.focusEl();
       
@@ -252,6 +307,10 @@ window.plainTextEditor = {
       }
    },
    
+   /**
+   * Selects the next occurance of a string
+   * provided as an argument to function 'find'
+   */
    findNext: function() {
       if(this._findNext < 0) {
          this._findNext = 0;
@@ -270,6 +329,11 @@ window.plainTextEditor = {
       }
    },
    
+   /**
+   * Selects previous occurance of a string
+   * (previous to the one selected by 'findNext' function) 
+   * provided as an argument to function 'find'
+   */
    findPrev: function() {
       this.focusEl();
       
@@ -284,15 +348,27 @@ window.plainTextEditor = {
       }
    },
    
+   /**
+   * Scrolls browser viewport to cursor/selection
+   * that is shown at a top of a viewport
+   */
    scroll: function() {
       this.scrollToSelection(0);
    },
    
+   /**
+   * Scrolls browser viewport to cursor/selection
+   * that is shown in a center of a viewport
+   */
    scrollCenter: function() {
       var centerPx = -1 * parseInt($(window).height() / 2);
       this.scrollToSelection(centerPx);
    },
    
+   /**
+   * Scrolls browser viewport to cursor/selection 
+   * plus specific offset in pixels given as an argument
+   */
    scrollToSelection: function(offsetPx) {
       var id = "tmp_span_element_to_delete";
       var tmpEl = document.createElement("span");
@@ -321,5 +397,46 @@ window.plainTextEditor = {
       var t = this._elQ.text();
       this._elQ.text(t);
       this.setSelection(startOffset, endOffset);   
+   },
+   
+   /**
+   * Substitutes first occurance of a string in a 
+   * content of an active element to new value
+   */
+   replace: function(oldtxt, newtxt) {
+      var cp = this.getCursorPos();
+      
+      var securedOldTxt = oldtxt.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
+      var regex = new RegExp(securedOldTxt);
+      var content = this.getText();
+      var newContent = content.replace(regex, newtxt);
+      this.setText(newContent);
+      
+      this.setCursorPos(cp);
+   },
+   
+   /**
+   * Substitutes all occurances of a string in a 
+   * content of an active element to new value
+   */
+   replaceAll: function(oldtxt, newtxt) {
+      var cp = this.getCursorPos();
+      
+      var securedOldTxt = oldtxt.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
+      var regex = new RegExp(securedOldTxt, "gi");
+      var content = this.getText();
+      var newContent = content.replace(regex, newtxt);
+      this.setText(newContent);
+      
+      this.setCursorPos(cp);   
+   },
+   
+   /**
+   * Replaces all occurances of a string in a 
+   * content of selection 
+   */
+   replaceInSel: function(oldtxt, newtxt) {
+      
    }
+   
 };
