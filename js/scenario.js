@@ -77,6 +77,11 @@ $(document).ready(function() {
    $("#scrollToCursorBtn").click(function() {
          ptEditor.scroll();
          ptEditor.focusEl();
+   });  
+   
+   $("#scrollCenterBtn").click(function() {
+         ptEditor.scrollCenter();
+         ptEditor.focusEl();
    }); 
 
    $("#findBtn").click(function() {

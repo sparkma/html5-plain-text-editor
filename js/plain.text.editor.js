@@ -285,6 +285,15 @@ window.plainTextEditor = {
    },
    
    scroll: function() {
+      this.scrollToSelection(0);
+   },
+   
+   scrollCenter: function() {
+      var centerPx = -1 * parseInt($(window).height() / 2);
+      this.scrollToSelection(centerPx);
+   },
+   
+   scrollToSelection: function(offsetPx) {
       var id = "tmp_span_element_to_delete";
       var tmpEl = document.createElement("span");
       tmpEl.id = id;
@@ -296,7 +305,7 @@ window.plainTextEditor = {
       range.insertNode( tmpEl );
       
       $('html, body').animate({
-         scrollTop: $(tmpEl).offset().top
+         scrollTop: $(tmpEl).offset().top + offsetPx
          }, 1000);
       
       var parentEl = range.startContainer;
@@ -311,6 +320,6 @@ window.plainTextEditor = {
       
       var t = this._elQ.text();
       this._elQ.text(t);
-      this.setSelection(startOffset, endOffset);
+      this.setSelection(startOffset, endOffset);   
    }
 };

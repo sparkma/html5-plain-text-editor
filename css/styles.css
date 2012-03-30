@@ -46,7 +46,7 @@ input:hover {
    padding-right: 22px;
    padding-bottom: 22px;
    min-height: 800px;
-   white-space: pre;
+   white-space: pre-wrap;
 }
 
 #menu {
