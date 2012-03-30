@@ -382,7 +382,7 @@ window.plainTextEditor = {
       
       $('html, body').animate({
          scrollTop: $(tmpEl).offset().top + offsetPx
-         }, 1000);
+         }, 500);
       
       var parentEl = range.startContainer;
       var childNodes = parentEl.childNodes
@@ -441,10 +441,14 @@ window.plainTextEditor = {
       var securedOldTxt = oldtxt.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
       var regex = new RegExp(securedOldTxt, "gi");
       var content = this.getSelection();
+      cp -= content.length;
       var newContent = content.replace(regex, newtxt);
-      this.setText(newContent);
       
-      this.setCursorPos(cp);  
+      window.getSelection().getRangeAt(0).deleteContents();
+      
+      this.insertBeforeCursor(newContent);
+      
+      this.setSelection(cp, cp + newContent.length);  
    }
    
 };

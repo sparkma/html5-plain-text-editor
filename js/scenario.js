@@ -2,9 +2,8 @@
 * Executes code after document is fully loaded
 */
 $(document).ready(function() {
-   
    var ptEditor = window.plainTextEditor;
-   
+         
    ptEditor.bindToElem($(".page").get(0));
    ptEditor.focusEl();
    
