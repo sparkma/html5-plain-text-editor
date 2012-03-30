@@ -41,9 +41,13 @@ window.plainTextEditor = {
       */
       this._clipboard = "";
       /**
-      * content of clipboard
+      * Holds lexema to search
+      */      
+      this._findTxt = "";
+      /**
+      * An offset for findNext
       */
-      this._findTxt = "";      
+      this._findNext = 0;      
    },
    
    /**
@@ -56,7 +60,7 @@ window.plainTextEditor = {
          */
          if(13 == ev.which) {
             ev.preventDefault();
-            
+            plainTextEditor.insertBeforeCursor("\n");
          }         
       });
    },
@@ -75,14 +79,23 @@ window.plainTextEditor = {
    }, 
 
    getSelection: function() {
-      var userSelection = null;
-      if (window.getSelection) {
-         userSelection = window.getSelection();
+      var userSelection = window.getSelection();
+      
+      var docFrag = userSelection.getRangeAt(0).cloneContents();
+      if( null == docFrag ) {
+         return "";
       }
-      else if (document.selection) { // should come last; Opera!
-         userSelection = document.selection.createRange();
+      var cn = docFrag.childNodes;
+      var TEXT_NODE = 3;
+      var content = "";
+      for( var i in cn ) {
+         var current = cn[i];
+         if( current.nodeType == TEXT_NODE ) {
+            content += current.nodeValue;
+         }
       }
-      return userSelection.toString();
+      
+      return content;
    },
 
    setSelection: function(startPos, endPos) {
@@ -227,23 +240,65 @@ window.plainTextEditor = {
    },
    
    find: function(txt) {
+      this.focusEl();
+      
       this._findTxt = txt;
+      var content = this.getText();
+      var startPos = content.indexOf(txt);
+      
+      this.setSelection(startPos, startPos+txt.length);
+      if(startPos > -1) {
+         this._findNext = startPos + txt.length;
+      }
    },
    
    findNext: function() {
+      if(this._findNext < 0) {
+         this._findNext = 0;
+      }
+      
+      this.focusEl();
+      
+      var txt = this._findTxt;
+      var content = this.getText();
+      
+      var startPos = content.indexOf(txt, this._findNext);
+      
+      this.setSelection(startPos, startPos+txt.length);
+      if(startPos > -1) {
+         this._findNext = startPos + txt.length;
+      }
    },
    
-   findPrevious: function() {
+   findPrev: function() {
+      this.focusEl();
+      
+      var txt = this._findTxt;
+      var content = this.getText();
+      
+      var startPos = content.lastIndexOf(txt, (this._findNext - txt.length -1));
+      
+      this.setSelection(startPos, startPos+txt.length);
+      if(startPos > -1) {
+         this._findNext = startPos + txt.length;
+      }
    },
    
-   scrollToCursor: function() {
-      var cursorPos = this.getCursorPos();
+   scroll: function() {
       var id = "tmp_span_element_to_delete";
       var tmpEl = document.createElement("span");
       tmpEl.id = id;
       var range = window.getSelection().getRangeAt(0);
+
+      var startOffset = range.startOffset;
+      var endOffset = range.endOffset;
+      
       range.insertNode( tmpEl );
-      tmpEl.scrollIntoView();
+      
+      $('html, body').animate({
+         scrollTop: $(tmpEl).offset().top
+         }, 1000);
+      
       var parentEl = range.startContainer;
       var childNodes = parentEl.childNodes
       for( var i in childNodes ) {
@@ -256,6 +311,6 @@ window.plainTextEditor = {
       
       var t = this._elQ.text();
       this._elQ.text(t);
-      this.setCursorPos(cursorPos);
+      this.setSelection(startOffset, endOffset);
    }
 };

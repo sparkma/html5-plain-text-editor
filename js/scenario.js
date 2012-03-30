@@ -75,7 +75,21 @@ $(document).ready(function() {
    });
    
    $("#scrollToCursorBtn").click(function() {
-         ptEditor.scrollToCursor();
+         ptEditor.scroll();
          ptEditor.focusEl();
-   });   
+   }); 
+
+   $("#findBtn").click(function() {
+         var t = prompt("Please, type text to search in the content");         
+         ptEditor.find(t);
+   });
+   
+   $("#findNextBtn").click(function() {
+         ptEditor.findNext();
+   }); 
+  
+   $("#findPrevBtn").click(function() {
+         ptEditor.findPrev();
+   }); 
+
 });
