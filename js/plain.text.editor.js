@@ -103,14 +103,64 @@ window.plainTextEditor = {
       this._elQ.html(formattedTxt);
       this.focusEl();
    }, 
-
+   
+   /**
+   * compatibility function for older browsers
+   */
+   getSelectedRangeObj: function(selectionObject) {
+      if (selectionObject.getRangeAt) {
+         var range = null;
+         try {
+            range = selectionObject.getRangeAt(0);
+         }
+         catch(e) {
+            /**
+            * For Safari: that is the way to handle
+            * the situation while no selection occurs
+            */
+            range = null;
+         }
+         return range;
+      }
+      else { 
+         var range = document.createRange();
+         range.setStart(selectionObject.anchorNode,selectionObject.anchorOffset);
+         range.setEnd(selectionObject.focusNode,selectionObject.focusOffset);
+         return range;
+      }   
+   },
+   
+   /**
+   * compatibility function for older browsers
+   */
+   getSelectionObj: function() {
+      var userSelection;
+      if (window.getSelection) {
+         userSelection = window.getSelection();
+      }
+      else if (document.selection) { 
+         /**
+         * Opera (should come last)
+         */
+         userSelection = document.selection.createRange();
+      }   
+      return userSelection;
+   },
+   
    /**
    * Retrieves the content of current selection
    */
    getSelection: function() {
-      var userSelection = window.getSelection();
+      var userSelection = this.getSelectionObj();
+      if(userSelection == null) {
+         return "";
+      }
+      var selectedRange = this.getSelectedRangeObj(userSelection);
+      if(selectedRange == null) {
+         return "";
+      }
       
-      var docFrag = userSelection.getRangeAt(0).cloneContents();
+      var docFrag = selectedRange.cloneContents();
       if( null == docFrag ) {
          return "";
       }
@@ -233,7 +283,15 @@ window.plainTextEditor = {
       * find current cursor position,
       * collapsing the selection if such appears
       */
-      var range = window.getSelection().getRangeAt(0);      
+      var userSelection = this.getSelectionObj();
+      if(userSelection == null) {
+         return "";
+      }
+      var range = this.getSelectedRangeObj(userSelection);
+      if(range == null) {
+         return "";
+      }
+      
       range.collapse(false);
       var position = range.startOffset;
       
@@ -301,7 +359,7 @@ window.plainTextEditor = {
    * an argument 
    */
    find: function(txt) {
-      if(null == txt || txt == '') {
+      if(arguments.length < 1) {
          return -1;
       }
       this.focusEl();
