@@ -97,22 +97,111 @@ describe('selection-spec', function(){
       expect(selTxt).not.toBe(emptyStr);
    });
    
-   
-   it("selects last word from the content", function() {
+   it("checking for out of bound", function() {
       var emptyStr = "";
-      var lastWordInContent = "belle";      
       
       var el = $("#" + _id).get(0);
       pte.bindToElem(el);
       
+      pte.setSelection( -8, 9999 );
+      selTxt = pte.getSelection();
+      expect(selTxt).toBe(emptyStr);
+   });
+   
+   it("checking for mixed up arguments", function() {
+      var emptyStr = "";
+      
+      
+      var el = $("#" + _id).get(0);
+      pte.bindToElem(el);
+      
+      var defCursorPos = pte.getCursorPos();
+      
+      pte.setSelection( 8, 5 );
+      selTxt = pte.getSelection();
+      expect(selTxt).toBe(emptyStr);
+      /**
+      * In HTML5 DOM ranges selections
+      * is also infulences cursor position
+      */
+      var cursorPos = pte.getCursorPos();
+      expect(cursorPos).toBe(defCursorPos);
+   });
+   
+   it("checking for a missing second argument", function() {
+      var emptyStr = "";
+      
+      
+      var el = $("#" + _id).get(0);
+      pte.bindToElem(el);
+      var defCursorPos = pte.getCursorPos();
+      
+      pte.setSelection( 8 );
+      selTxt = pte.getSelection();
+      expect(selTxt).toBe(emptyStr);
       
       /**
-      * selection last word of the content
+      * In HTML5 DOM ranges selections
+      * is also infulences cursor position
       */
-      pte.setSelection( _content.length - lastWordInContent.length,
-                        _content.length );
+      var cursorPos = pte.getCursorPos();
+      expect(cursorPos).toBe(defCursorPos);
+   });      
+   
+   it("checking for a missing both arguments", function() {
+      var emptyStr = "";
+      
+      var el = $("#" + _id).get(0);
+      pte.bindToElem(el);
+      var defCursorPos = pte.getCursorPos();
+      
+      pte.setSelection( );
       selTxt = pte.getSelection();
-      expect(selTxt).toBe(lastWordInContent);
-      expect(selTxt).not.toBe(emptyStr);
+      expect(selTxt).toBe(emptyStr);
+      
+      /**
+      * In HTML5 DOM ranges selections
+      * is also infulences cursor position
+      */
+      var cursorPos = pte.getCursorPos();
+      expect(cursorPos).toBe(defCursorPos);
    });
+   
+   it("checking for too big second argument", function() {
+      var emptyStr = "";
+      
+      var el = $("#" + _id).get(0);
+      pte.bindToElem(el);
+      var defCursorPos = pte.getCursorPos();
+      
+      pte.setSelection( 5, 9999);
+      selTxt = pte.getSelection();
+      expect(selTxt).toBe(emptyStr);
+      
+      /**
+      * In HTML5 DOM ranges selections
+      * is also infulences cursor position
+      */
+      var cursorPos = pte.getCursorPos();
+      expect(cursorPos).toBe(defCursorPos);
+   });         
+
+   it("checking for too small first argument", function() {
+      var emptyStr = "";
+      
+      var el = $("#" + _id).get(0);
+      pte.bindToElem(el);
+      var defCursorPos = pte.getCursorPos();
+      
+      pte.setSelection( -5, 8);
+      selTxt = pte.getSelection();
+      expect(selTxt).toBe(emptyStr);
+      
+      /**
+      * In HTML5 DOM ranges selections
+      * is also infulences cursor position
+      */
+      var cursorPos = pte.getCursorPos();
+      expect(cursorPos).toBe(defCursorPos);
+   });            
 });
