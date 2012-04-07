@@ -24,6 +24,9 @@ window.plainTextEditor = {
    /**
    * Attaches an editor to 
    * particular HTML element
+   * passed as an argument.
+   * Pay attention that an argument
+   * should be DOM element (not a jQuery wrapper on it)
    */
    bindToElem: function(elem) {
       /**

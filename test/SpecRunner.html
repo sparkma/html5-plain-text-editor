@@ -1,0 +1,40 @@
+<html>
+<head>
+   <title>Jasmine Test Runner</title>
+   
+   <!-- Jasmine CSS includes -->
+   
+   <link rel="stylesheet" type="text/css" href="js/lib/jasmine-1.1.0/jasmine.css">
+
+   <!-- Dependencies&Modules-->
+   
+   <script type="text/javascript" src="../js/lib/jquery-1.7.1.min.js"></script>
+   <script type="text/javascript" src="../js/plain.text.editor.js"></script>
+   
+   <!-- Jasmine JavaScript includes -->
+   
+   <script type="text/javascript" src="js/lib/jasmine-1.1.0/jasmine.js"></script>
+   <script type="text/javascript" src="js/lib/jasmine-1.1.0/jasmine-html.js"></script>
+   
+   <!-- Spec files -->
+   
+   <script type="text/javascript" src="js/specs/GetSetTextSpec.js"></script>
+   <script type="text/javascript" src="js/specs/CursorSpec.js"></script>
+   <script type="text/javascript" src="js/specs/FindSpec.js"></script>
+   <script type="text/javascript" src="js/specs/ReplaceSpec.js"></script>
+   <script type="text/javascript" src="js/specs/SelectionSpec.js"></script>   
+</head>
+<body>
+
+   <script type="text/javascript"> 
+
+   jasmine.getEnv().addReporter(
+                     new jasmine.TrivialReporter()
+                  );     
+
+   jasmine.getEnv().execute();
+
+   </script>
+   
+</body>
+</html>
