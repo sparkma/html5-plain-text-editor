@@ -129,6 +129,9 @@ window.plainTextEditor = {
 
    /**
    * Selects a range in a text of active element
+   * range is selected starting from start pos 
+   * (inculding startPos) and ending before
+   * end pos (excluding endPos)
    */
    setSelection: function(startPos, endPos) {
      if(startPos > endPos
@@ -298,6 +301,9 @@ window.plainTextEditor = {
    * an argument 
    */
    find: function(txt) {
+      if(null == txt || txt == '') {
+         return -1;
+      }
       this.focusEl();
       
       this._findTxt = txt;
@@ -308,6 +314,8 @@ window.plainTextEditor = {
       if(startPos > -1) {
          this._findNext = startPos + txt.length;
       }
+      
+      return startPos;
    },
    
    /**
@@ -330,6 +338,7 @@ window.plainTextEditor = {
       if(startPos > -1) {
          this._findNext = startPos + txt.length;
       }
+      return startPos;
    },
    
    /**
@@ -349,6 +358,7 @@ window.plainTextEditor = {
       if(startPos > -1) {
          this._findNext = startPos + txt.length;
       }
+      return startPos;
    },
    
    /**
