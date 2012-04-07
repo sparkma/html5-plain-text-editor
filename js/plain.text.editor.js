@@ -436,7 +436,7 @@ window.plainTextEditor = {
       var cp = this.getCursorPos();
       
       var securedOldTxt = oldtxt.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
-      var regex = new RegExp(securedOldTxt, "gi");
+      var regex = new RegExp(securedOldTxt, "g");
       var content = this.getText();
       var newContent = content.replace(regex, newtxt);
       this.setText(newContent);
@@ -452,7 +452,7 @@ window.plainTextEditor = {
       var cp = this.getCursorPos();
       
       var securedOldTxt = oldtxt.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
-      var regex = new RegExp(securedOldTxt, "gi");
+      var regex = new RegExp(securedOldTxt, "g");
       var content = this.getSelection();
       cp -= content.length;
       var newContent = content.replace(regex, newtxt);
