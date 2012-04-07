@@ -193,7 +193,7 @@ describe('selection-spec', function(){
       pte.bindToElem(el);
       var defCursorPos = pte.getCursorPos();
       
-      pte.setSelection( -5, 8);
+      pte.setSelection( -5, 8 );
       selTxt = pte.getSelection();
       expect(selTxt).toBe(emptyStr);
       
