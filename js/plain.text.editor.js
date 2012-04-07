@@ -417,6 +417,9 @@ window.plainTextEditor = {
    * content of an active element to new value
    */
    replace: function(oldtxt, newtxt) {
+      if(arguments.length < 2) {
+         return;
+      }
       var cp = this.getCursorPos();
       
       var securedOldTxt = oldtxt.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
@@ -433,6 +436,9 @@ window.plainTextEditor = {
    * content of an active element to new value
    */
    replaceAll: function(oldtxt, newtxt) {
+      if(arguments.length < 2) {
+         return;
+      }
       var cp = this.getCursorPos();
       
       var securedOldTxt = oldtxt.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
@@ -449,6 +455,9 @@ window.plainTextEditor = {
    * content of selection 
    */
    replaceInSel: function(oldtxt, newtxt) {
+      if(arguments.length < 2) {
+         return;
+      }
       var cp = this.getCursorPos();
       
       var securedOldTxt = oldtxt.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
