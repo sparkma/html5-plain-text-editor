@@ -184,14 +184,16 @@ window.plainTextEditor = {
    * end pos (excluding endPos)
    */
    setSelection: function(startPos, endPos) {
+     if(arguments.length < 2) {
+      return null;
+     }
      if(startPos > endPos
          || startPos < 0
          || endPos > this.getText().length) {
       return null;
      }    
      
-     var r = document.createRange();
-     
+     var  r = document.createRange();
      
      var startNode = this._el.firstChild;
      var endNode = this._el.firstChild;
@@ -229,6 +231,7 @@ window.plainTextEditor = {
      this.clearSelection();
      
      var selection = window.getSelection();
+     
      selection.addRange(r);
      
      this.focusEl();
