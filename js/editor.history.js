@@ -15,8 +15,6 @@ editorHistory = {
     * with current history object
     */
    _pte : null,
-  
-   _cursorPositionBuffer: null,
    
    /**
     * Initialization function
@@ -31,52 +29,44 @@ editorHistory = {
    bindHandlers: function() {
       var _editorHistory = this;
       
-      $(document).keydown(function(ev) {         
-         _editorHistory.keyDownHandler(ev);         
-      });
-      
       $(document).keypress(function(ev) {         
          _editorHistory.keyPressHandler(ev);         
       });
       
    },   
    
-   keyDownHandler: function(ev) {
-      if(this._pte._elQ.is(":focus")) {
-         this._cursorPositionBuffer = this._pte.getCursorPos();
-      }   
-   },
-   
    keyPressHandler: function(ev) {
+      
       if(this._pte._elQ.is(":focus")) {
+      
          var cursorPos = this._pte.getCursorPos();
-         
-         if ( null !== this._cursorPositionBuffer 
-               && cursorPos !== this._cursorPositionBuffer ) {
             
-            var chr = String.fromCharCode(ev.which);
-            this.trackTypeAction(chr, cursorPos);
-            this._cursorPositionBuffer = null;
+         var chr = String.fromCharCode(ev.which);
+         if("" == chr || null === chr || chr.length == 0) {
+            return;
          }
+         this.trackTypeAction(chr, cursorPos);
+         this._cursorPositionBuffer = null;
+         
+         this._isFocused = false;
+         
       }
    },
    
    trackTypeAction: function(character, cursorPos) {
-      
+
       this._actions.push({ _type: "type",
                            _character: character,
                            _cursorPos: cursorPos });
-      
+
    },
    
    stepBack: function() {
       if(this._actions.length > 0) {
          this._lastAction = this._actions.pop();
          
-         if( "type" == this._lastAction._type ) {
-            console.log(this._actions);
-            alert(this._lastAction._cursorPos);
-            this._pte.setCursorPos(this._lastAction._cursorPos);
+         if( "type" == this._lastAction._type ) {            
+            this._pte.setCursorPos(this._lastAction._cursorPos+1);
             this._pte.removeBeforeCursor();
          }
          
@@ -87,8 +77,9 @@ editorHistory = {
       if(null !== this._lastAction) {
          if("type" == this._lastAction._type) {
             
-            this._pte.setCursorPos(this._lastAction._cursorPos-1);
+            this._pte.setCursorPos(this._lastAction._cursorPos);
             this._pte.insertBeforeCursor(this._lastAction._character);
+            this._actions.push(this._lastAction);
             this._lastAction = null;
          }
       }

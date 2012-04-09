@@ -92,7 +92,7 @@ window.plainTextEditor = {
       var content = "";
       for( var i in cn ) {
          var current = cn[i];
-         if( current.nodeType == TEXT_NODE ) {
+         if( current && current.nodeType == TEXT_NODE ) {
             content += current.nodeValue;
          }
       }
@@ -169,6 +169,7 @@ window.plainTextEditor = {
      if(arguments.length < 2) {
       return null;
      }
+     
      if(startPos > endPos
          || startPos < 0
          || endPos > this.getText().length) {
