@@ -37,7 +37,7 @@ window.plainTextEditor = {
          this.init();
       }
       /**
-      * Holds DOM elem
+      * DOM element
       */
       this._el = elem;
       /**
@@ -59,7 +59,12 @@ window.plainTextEditor = {
       /**
       * An offset for findNext, findPrev operations
       */
-      this._findNext = 0;      
+      this._findNext = 0;
+      /**
+      * History tracking object with undo/redo operations
+      */
+      
+      this._editorHistory = editorHistory.init(this);      
    },
    
    /**
@@ -82,7 +87,7 @@ window.plainTextEditor = {
    * element without HTML formatting
    */
    getText: function() {
-      var cn = this._el.childNodes;
+      var cn = this._elQ.get(0).childNodes;
       var TEXT_NODE = 3;
       var content = "";
       for( var i in cn ) {
@@ -172,8 +177,8 @@ window.plainTextEditor = {
      
      var  r = document.createRange();
      
-     var startNode = this._el.firstChild;
-     var endNode = this._el.firstChild;
+     var startNode = this._elQ.get(0).firstChild;
+     var endNode = this._elQ.get(0).firstChild;
 
      /**
      * Checking type of node
@@ -185,7 +190,7 @@ window.plainTextEditor = {
         * in case it isn't a text find 
         * text node from element
         */
-        var childNodes = this._el.childNodes;
+        var childNodes = this._elQ.get(0).childNodes;
         var positionCounter = 0;
         for(var index in childNodes) {
          
@@ -288,21 +293,32 @@ window.plainTextEditor = {
       var newPos = position + txt.length;
       this.setCursorPos(newPos);
    },
+   
+   /**
+    * An analog of backspace button
+    */
+   removeBeforeCursor: function() {
+      var cursorPos = this.getCursorPos();
+      this.setSelection(cursorPos-1,cursorPos);
+      window.getSelection().getRangeAt(0).deleteContents();
+   },
 
    /**
    * Undo last action. Currently is under construction
    */
    undo: function(position) {
-      document.execCommand("undo", false, null);
-      this.focusEl();
+      //document.execCommand("undo", false, null);
+      this._editorHistory.stepBack();
+      //this.focusEl();
    },
 
    /**
    * Undo the undo. Currently is under construction.
    */
    redo: function(position) {
-      document.execCommand("Redo", false, null);
-      this.focusEl();
+      //document.execCommand("Redo", false, null);
+      this._editorHistory.stepForward();
+      //this.focusEl();
    },
    
    focusEl: function() {
