@@ -105,11 +105,11 @@ window.plainTextEditor = {
    }, 
    
    /**
-   * compatibility function for older browsers
+   * compatibility function for diff browsers
    */
    getSelectedRangeObj: function(selectionObject) {
+      var range = null;
       if (selectionObject.getRangeAt) {
-         var range = null;
          try {
             range = selectionObject.getRangeAt(0);
          }
@@ -120,38 +120,15 @@ window.plainTextEditor = {
             */
             range = null;
          }
-         return range;
       }
-      else { 
-         var range = document.createRange();
-         range.setStart(selectionObject.anchorNode,selectionObject.anchorOffset);
-         range.setEnd(selectionObject.focusNode,selectionObject.focusOffset);
-         return range;
-      }   
-   },
-   
-   /**
-   * compatibility function for older browsers
-   */
-   getSelectionObj: function() {
-      var userSelection;
-      if (window.getSelection) {
-         userSelection = window.getSelection();
-      }
-      else if (document.selection) { 
-         /**
-         * Opera (should come last)
-         */
-         userSelection = document.selection.createRange();
-      }   
-      return userSelection;
+      return range;
    },
    
    /**
    * Retrieves the content of current selection
    */
    getSelection: function() {
-      var userSelection = this.getSelectionObj();
+      var userSelection = window.getSelection();
       if(userSelection == null) {
          return "";
       }
@@ -286,7 +263,7 @@ window.plainTextEditor = {
       * find current cursor position,
       * collapsing the selection if such appears
       */
-      var userSelection = this.getSelectionObj();
+      var userSelection = window.getSelection();
       if(userSelection == null) {
          return "";
       }
