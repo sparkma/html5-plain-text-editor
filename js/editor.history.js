@@ -60,61 +60,92 @@ editorHistory = {
    
    trackTypeAction: function(character, cursorPos) {
 
-      this._actions.push({ _type: "type",
+      this._actions.push({ _type: "Type",
                            _character: character,
                            _cursorPos: cursorPos });
 
    },
    
    trackReplace: function(oldStr, newStr) {
+      
+      this._actions.push({ _type: "Replace",
+                           _oldStr: oldStr,
+                           _newStr: newStr });
+                           
    },
    
    trackReplaceAll: function(oldStr, newStr) {
+   
+      this._actions.push({ _type: "ReplaceAll",
+                           _oldStr: oldStr,
+                           _newStr: newStr });
+                           
    },
    
    trackReplaceInSel: function(startSel, endSel, oldStr, newStr) {
+
+      this._actions.push({ _type: "ReplaceInSel",
+                           _startSel: startSel,
+                           _endSel: endSel,
+                           _oldStr: oldStr,
+                           _newStr: newStr });
+
    },
    
-   trackCut: function() {
+   trackCut: function(startSel, endSel, str) {
+
+      this._actions.push({ _type: "Cut",
+                           _startSel: startSel,
+                           _endSel: endSel,
+                           _str: str });
+
    },
    
-   trackPaste: function() {
+   trackPaste: function(clipboard, cursorPos) {
+
+      this._actions.push({ _type: "Paste",
+                           _clipboard: clipboard,
+                           _cursorPos: cursorPos });
+
    },
    
    stepBack: function() {
       if(this._actions.length > 0) {
          this._lastAction = this._actions.pop();
-         
-         if( "type" == this._lastAction._type ) {            
-            this._pte.setCursorPos(this._lastAction._cursorPos + 1);
-            this._pte.removeBeforeCursor();
-            
-            if("\n" == this._lastAction._character) {
-               var pos = this._pte.getCursorPos();
-               this._pte.setCursorPos(pos-1);
-            }
-            
-         }
-         
+         var methodName = "stepBack" + this._lastAction._type;
+         this[methodName]();         
+      }
+   },
+      
+   stepForward: function() {
+      if(null !== this._lastAction) {
+         var methodName = "stepForward" + this._lastAction._type;
+         this[methodName]();
       }
    },
    
-   stepForward: function() {
-      if(null !== this._lastAction) {
-         if("type" == this._lastAction._type) {
-            
-            this._pte.setCursorPos(this._lastAction._cursorPos);
-            this._pte.insertBeforeCursor(this._lastAction._character);
-            this._actions.push(this._lastAction);
-            
-            if("\n" == this._lastAction._character) {
-               var pos = this._pte.getCursorPos();
-               this._pte.setCursorPos(pos-1);
-            }
-            
-            this._lastAction = null;
-         }
+   stepBackType: function() {
+      this._pte.setCursorPos(this._lastAction._cursorPos + 1);
+      this._pte.removeBeforeCursor();
+      
+      if("\n" == this._lastAction._character) {
+         var pos = this._pte.getCursorPos();
+         this._pte.setCursorPos(pos-1);
       }
+         
+   },
+   
+   stepForwardType: function() {
+      this._pte.setCursorPos(this._lastAction._cursorPos);
+      this._pte.insertBeforeCursor(this._lastAction._character);
+      this._actions.push(this._lastAction);
+      
+      if("\n" == this._lastAction._character) {
+         var pos = this._pte.getCursorPos();
+         this._pte.setCursorPos(pos-1);
+      }
+      
+      this._lastAction = null;   
    }
    
 };
