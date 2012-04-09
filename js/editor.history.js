@@ -32,28 +32,22 @@ editorHistory = {
       var _editorHistory = this;
       
       $(document).keydown(function(ev) {         
-         alert("down");
-         _editorHistory.keyPressHandler(ev);         
+         _editorHistory.keyDownHandler(ev);         
       });
       
       $(document).keypress(function(ev) {         
-         alert("press");
          _editorHistory.keyPressHandler(ev);         
       });
       
-      $(document).keyup(function(ev) {         
-         alert("up");
-         _editorHistory.keyUpHandler(ev);         
-      });      
    },   
    
-   keyPressHandler: function(ev) {
+   keyDownHandler: function(ev) {
       if(this._pte._elQ.is(":focus")) {
          this._cursorPositionBuffer = this._pte.getCursorPos();
-      }
+      }   
    },
    
-   keyUpHandler: function(ev) {
+   keyPressHandler: function(ev) {
       if(this._pte._elQ.is(":focus")) {
          var cursorPos = this._pte.getCursorPos();
          
