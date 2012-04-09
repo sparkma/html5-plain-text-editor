@@ -113,39 +113,53 @@ editorHistory = {
       if(this._actions.length > 0) {
          this._lastAction = this._actions.pop();
          var methodName = "stepBack" + this._lastAction._type;
-         this[methodName]();         
+         this[methodName](this._lastAction);         
       }
    },
       
    stepForward: function() {
       if(null !== this._lastAction) {
          var methodName = "stepForward" + this._lastAction._type;
-         this[methodName]();
+         this[methodName](this._lastAction);
+         
+         this._actions.push(this._lastAction);
+         this._lastAction = null;
       }
    },
    
-   stepBackType: function() {
-      this._pte.setCursorPos(this._lastAction._cursorPos + 1);
+   stepBackType: function(action) {
+      this._pte.setCursorPos(action._cursorPos + 1);
       this._pte.removeBeforeCursor();
       
-      if("\n" == this._lastAction._character) {
+      if("\n" == action._character) {
          var pos = this._pte.getCursorPos();
          this._pte.setCursorPos(pos-1);
-      }
-         
+      }         
    },
    
-   stepForwardType: function() {
-      this._pte.setCursorPos(this._lastAction._cursorPos);
-      this._pte.insertBeforeCursor(this._lastAction._character);
-      this._actions.push(this._lastAction);
+   stepForwardType: function(action) {
+      this._pte.setCursorPos(action._cursorPos);
+      this._pte.insertBeforeCursor(action._character);
       
-      if("\n" == this._lastAction._character) {
+      if("\n" == action._character) {
          var pos = this._pte.getCursorPos();
          this._pte.setCursorPos(pos-1);
       }
-      
-      this._lastAction = null;   
-   }
+   },
    
+   stepBackReplace: function(action) {
+      this._pte.replace(action._newStr, action._oldStr, true);
+   },
+   
+   stepForwardReplace: function(action) {
+      this._pte.replace(action._oldStr, action._newStr, true);
+   },
+   
+   stepBackReplaceAll: function(action) {
+      this._pte.replaceAll(action._newStr, action._oldStr, true);
+   },
+   
+   stepForwardReplaceAll: function(action) {
+      this._pte.replaceAll(action._oldStr, action._newStr, true);
+   },   
 };

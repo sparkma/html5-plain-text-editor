@@ -472,7 +472,7 @@ window.plainTextEditor = {
    * Substitutes first occurance of a string in a 
    * content of an active element to new value
    */
-   replace: function(oldtxt, newtxt) {
+   replace: function(oldtxt, newtxt, stopTracking) {
       if(arguments.length < 2) {
          return;
       }
@@ -485,13 +485,22 @@ window.plainTextEditor = {
       this.setText(newContent);
       
       this.setCursorPos(cp);
+      
+      if(arguments.length >= 3 && stopTracking) {
+         return;
+      }
+      /**
+       * Adding an action to history
+       */
+      this._editorHistory.trackReplace(oldtxt, newtxt);
+      
    },
    
    /**
    * Substitutes all occurances of a string in a 
    * content of an active element to new value
    */
-   replaceAll: function(oldtxt, newtxt) {
+   replaceAll: function(oldtxt, newtxt, stopTracking) {
       if(arguments.length < 2) {
          return;
       }
@@ -503,7 +512,15 @@ window.plainTextEditor = {
       var newContent = content.replace(regex, newtxt);
       this.setText(newContent);
       
-      this.setCursorPos(cp);   
+      this.setCursorPos(cp); 
+
+      if(arguments.length >= 3 && stopTracking) {
+         return;
+      }
+      /**
+       * Adding an action to history
+       */
+      this._editorHistory.trackReplaceAll(oldtxt, newtxt);      
    },
    
    /**
