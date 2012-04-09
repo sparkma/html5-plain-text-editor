@@ -45,6 +45,11 @@ editorHistory = {
          if("" == chr || null === chr || chr.length == 0) {
             return;
          }
+         
+         if(13 == ev.which) {
+            chr = "\n";
+         }
+         
          this.trackTypeAction(chr, cursorPos);
          this._cursorPositionBuffer = null;
          
@@ -61,13 +66,34 @@ editorHistory = {
 
    },
    
+   trackReplace: function(oldStr, newStr) {
+   },
+   
+   trackReplaceAll: function(oldStr, newStr) {
+   },
+   
+   trackReplaceInSel: function(startSel, endSel, oldStr, newStr) {
+   },
+   
+   trackCut: function() {
+   },
+   
+   trackPaste: function() {
+   },
+   
    stepBack: function() {
       if(this._actions.length > 0) {
          this._lastAction = this._actions.pop();
          
          if( "type" == this._lastAction._type ) {            
-            this._pte.setCursorPos(this._lastAction._cursorPos+1);
+            this._pte.setCursorPos(this._lastAction._cursorPos + 1);
             this._pte.removeBeforeCursor();
+            
+            if("\n" == this._lastAction._character) {
+               var pos = this._pte.getCursorPos();
+               this._pte.setCursorPos(pos-1);
+            }
+            
          }
          
       }
