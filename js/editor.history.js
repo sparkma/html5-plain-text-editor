@@ -161,5 +161,13 @@ editorHistory = {
    
    stepForwardReplaceAll: function(action) {
       this._pte.replaceAll(action._oldStr, action._newStr, true);
-   },   
+   }, 
+
+   stepBackReplaceInSel: function(action) {
+      this._pte.replaceAll(action._newStr, action._oldStr, true);
+   },
+   
+   stepForwardReplaceInSel: function(action) {
+      this._pte.replaceAll(action._oldStr, action._newStr, true);
+   },      
 };
