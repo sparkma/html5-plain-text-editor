@@ -106,6 +106,12 @@ editorHistory = {
             this._pte.setCursorPos(this._lastAction._cursorPos);
             this._pte.insertBeforeCursor(this._lastAction._character);
             this._actions.push(this._lastAction);
+            
+            if("\n" == this._lastAction._character) {
+               var pos = this._pte.getCursorPos();
+               this._pte.setCursorPos(pos-1);
+            }
+            
             this._lastAction = null;
          }
       }

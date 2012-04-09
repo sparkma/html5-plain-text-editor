@@ -288,6 +288,7 @@ window.plainTextEditor = {
 
       this._elQ.text(newContent);
 
+      
       /**
       * setting new cursor position
       */
