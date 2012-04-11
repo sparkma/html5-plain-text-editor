@@ -527,7 +527,7 @@ window.plainTextEditor = {
    * Replaces all occurances of a string in a 
    * content of selection 
    */
-   replaceInSel: function(oldtxt, newtxt) {
+   replaceInSel: function(oldtxt, newtxt, stopTracking) {
       if(arguments.length < 2) {
          return;
       }
@@ -544,6 +544,17 @@ window.plainTextEditor = {
       this.insertBeforeCursor(newContent);
       
       this.setSelection(cp, cp + newContent.length);  
+
+      if(arguments.length >= 3 && stopTracking) {
+         return;
+      }
+      /**
+       * Adding an action to history
+       */
+      var selEnd = this.getCursorPos();
+      var selStart = selEnd - this.getSelection().length;
+      this._editorHistory.trackReplaceInSel(selStart, selEnd, oldtxt, newtxt);      
+      
    }
    
 };

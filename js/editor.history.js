@@ -164,10 +164,14 @@ editorHistory = {
    }, 
 
    stepBackReplaceInSel: function(action) {
-      this._pte.replaceAll(action._newStr, action._oldStr, true);
+      this._pte.setSelection(action._startSel, action._endSel);
+      this._pte.replaceInSel(action._newStr, action._oldStr, true);
+      action._endSel = this._pte.getCursorPos();
    },
    
    stepForwardReplaceInSel: function(action) {
-      this._pte.replaceAll(action._oldStr, action._newStr, true);
+      this._pte.setSelection(action._startSel, action._endSel);
+      this._pte.replaceInSel(action._oldStr, action._newStr, true);
+      action._endSel = this._pte.getCursorPos();
    },      
 };
