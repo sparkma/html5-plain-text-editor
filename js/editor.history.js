@@ -29,7 +29,7 @@ editorHistory = {
    bindHandlers: function() {
       var _editorHistory = this;
       
-      $(document).keypress(function(ev) {         
+      $(document).keypress(function(ev) {
          _editorHistory.keyPressHandler(ev);         
       });
       

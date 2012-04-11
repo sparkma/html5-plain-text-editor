@@ -72,13 +72,92 @@ window.plainTextEditor = {
    */
    attachDocumentHdlrs : function() {
       $(document).keypress(function(ev) {
+                  console.log(ev);
+         if(!plainTextEditor._elQ || !plainTextEditor._elQ.is(":focus")) {
+            return;
+         }
+         
          /**
-         * 13 is a key code for 'enter'
-         */
+          * 13 is a key code for 'enter'
+          */
          if(13 == ev.which) {
             ev.preventDefault();
             plainTextEditor.insertBeforeCursor("\n");
-         }         
+         }     
+         /**
+          * 8 is a key code for 'backspace'
+          */
+         if(8 == ev.which) {
+            ev.preventDefault();
+            plainTextEditor.removeBeforeCursor();
+         }
+         /**
+         * is a key code for 'del'
+         */
+         if(46 === ev.keyCode && !ev.shiftKey) {
+            ev.preventDefault();
+            var cursorPos = plainTextEditor.getCursorPos();
+            if(cursorPos+1 <= plainTextEditor.getText().length) {
+               plainTextEditor.setCursorPos(cursorPos + 1);
+               plainTextEditor.removeBeforeCursor();
+            }
+         }
+         
+         /**
+          * ctrl + a
+          */
+         if(97 === ev.which && ev.ctrlKey) {
+            ev.preventDefault();
+            plainTextEditor.setSelection(0, plainTextEditor.getText().length-1);
+         }
+          
+         /**
+         * ctrl + c
+         */
+         if(99 === ev.which && ev.ctrlKey) {
+            ev.preventDefault();
+            plainTextEditor.copy();
+         }
+         
+         /**
+         * ctrl + v
+         */
+         if(118 === ev.which && ev.ctrlKey) {
+            ev.preventDefault();
+            plainTextEditor.paste();
+         }
+         
+         /**
+          * ctrl + x
+          */
+         if(120 === ev.which && ev.ctrlKey) {
+            ev.preventDefault();
+            plainTextEditor.cut();
+         }
+          
+         /**
+          * shift + del
+          */
+         if(46 === ev.keyCode && ev.shiftKey) {
+            ev.preventDefault();
+            plainTextEditor.cut();
+         }
+         
+         /**
+          * shift + ins
+          */
+         if(45 === ev.keyCode && ev.shiftKey) {
+            ev.preventDefault();
+            plainTextEditor.paste();
+         }
+         
+         /**
+          * ins, disabled
+          */       
+         if(45 === ev.keyCode) {
+            ev.preventDefault();
+         }
+                   
       });
    },
 
