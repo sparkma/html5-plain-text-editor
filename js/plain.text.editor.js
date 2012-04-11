@@ -338,18 +338,38 @@ window.plainTextEditor = {
    /**
    * Cuts the selected area into clipboard
    */
-   cut: function() {
+   cut: function(stopTracking) {
       this.copy();
       this.focusEl();
+      var content = this.getSelection();
       window.getSelection().getRangeAt(0).deleteContents();
+      
+      if(arguments.length >= 1 && stopTracking) {
+         return;
+      }
+      /**
+      * Adding into history
+      */
+      var cursorPos = this.getCursorPos();
+      this._editorHistory.trackCut(cursorPos, content);
    },
    
    /**
    * Inserts the content of clipboard to current
    * cursor position
    */
-   paste: function() {
+   paste: function(stopTracking) {
+      var cursorPos = this.getCursorPos();
+      
       this.insertBeforeCursor(this._clipboard);
+      
+      if(arguments.length >= 1 && stopTracking) {
+         return;
+      }
+      /**
+      * Adding into history
+      */      
+      this._editorHistory.trackPaste(this._clipboard, cursorPos);
    },
    
    /**

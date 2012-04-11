@@ -73,7 +73,7 @@ editorHistory = {
                            _newStr: newStr });
                            
    },
-   
+
    trackReplaceAll: function(oldStr, newStr) {
    
       this._actions.push({ _type: "ReplaceAll",
@@ -81,7 +81,7 @@ editorHistory = {
                            _newStr: newStr });
                            
    },
-   
+
    trackReplaceInSel: function(startSel, endSel, oldStr, newStr) {
 
       this._actions.push({ _type: "ReplaceInSel",
@@ -91,16 +91,15 @@ editorHistory = {
                            _newStr: newStr });
 
    },
-   
-   trackCut: function(startSel, endSel, str) {
+
+   trackCut: function(cursorPos, str) {
 
       this._actions.push({ _type: "Cut",
-                           _startSel: startSel,
-                           _endSel: endSel,
+                           _cursorPos: cursorPos,
                            _str: str });
 
    },
-   
+
    trackPaste: function(clipboard, cursorPos) {
 
       this._actions.push({ _type: "Paste",
@@ -108,7 +107,7 @@ editorHistory = {
                            _cursorPos: cursorPos });
 
    },
-   
+
    stepBack: function() {
       if(this._actions.length > 0) {
          this._lastAction = this._actions.pop();
@@ -116,7 +115,7 @@ editorHistory = {
          this[methodName](this._lastAction);         
       }
    },
-      
+
    stepForward: function() {
       if(null !== this._lastAction) {
          var methodName = "stepForward" + this._lastAction._type;
@@ -126,17 +125,17 @@ editorHistory = {
          this._lastAction = null;
       }
    },
-   
+
    stepBackType: function(action) {
       this._pte.setCursorPos(action._cursorPos + 1);
       this._pte.removeBeforeCursor();
-      
+
       if("\n" == action._character) {
          var pos = this._pte.getCursorPos();
          this._pte.setCursorPos(pos-1);
       }         
    },
-   
+
    stepForwardType: function(action) {
       this._pte.setCursorPos(action._cursorPos);
       this._pte.insertBeforeCursor(action._character);
@@ -146,11 +145,11 @@ editorHistory = {
          this._pte.setCursorPos(pos-1);
       }
    },
-   
+
    stepBackReplace: function(action) {
       this._pte.replace(action._newStr, action._oldStr, true);
    },
-   
+
    stepForwardReplace: function(action) {
       this._pte.replace(action._oldStr, action._newStr, true);
    },
@@ -158,20 +157,41 @@ editorHistory = {
    stepBackReplaceAll: function(action) {
       this._pte.replaceAll(action._newStr, action._oldStr, true);
    },
-   
+
    stepForwardReplaceAll: function(action) {
       this._pte.replaceAll(action._oldStr, action._newStr, true);
-   }, 
+   },
 
    stepBackReplaceInSel: function(action) {
       this._pte.setSelection(action._startSel, action._endSel);
       this._pte.replaceInSel(action._newStr, action._oldStr, true);
       action._endSel = this._pte.getCursorPos();
    },
-   
+
    stepForwardReplaceInSel: function(action) {
       this._pte.setSelection(action._startSel, action._endSel);
       this._pte.replaceInSel(action._oldStr, action._newStr, true);
       action._endSel = this._pte.getCursorPos();
-   },      
+   },
+
+   stepBackCut: function(action) {
+      this._pte.setCursorPos(action._cursorPos);
+      this._pte.insertBeforeCursor(action._str);
+   },
+
+   stepForwardCut: function(action) {
+      this._pte.setSelection(action._cursorPos, action._cursorPos + action._str.length);
+      this._pte.cut(true);
+   },
+
+   stepBackPaste: function(action) {
+      this._pte.setSelection(action._cursorPos, action._cursorPos + action._clipboard.length);
+      this._pte.cut(true);
+   },
+
+   stepForwardPaste: function(action) {
+      this._pte.setCursorPos(action._cursorPos);
+      this._pte._clipboard = action._clipboard;
+      this._pte.paste(true);
+   }
 };
