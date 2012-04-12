@@ -51,10 +51,6 @@ editorHistory = {
          }
          
          this.trackTypeAction(chr, cursorPos);
-         this._cursorPositionBuffer = null;
-         
-         this._isFocused = false;
-         
       }
    },
    
