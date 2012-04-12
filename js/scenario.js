@@ -112,5 +112,12 @@ $(document).ready(function() {
          var newTxt = prompt("Please, type text to substitue");
          ptEditor.replaceInSel(oldTxt, newTxt);
    });
+
+   $("#alignLeftBtn").click(function() {
+      ptEditor.alignLeft();
+   });
    
+   $("#alignRightBtn").click(function() {
+      ptEditor.alignRight();
+   });   
 });

@@ -84,6 +84,7 @@ window.plainTextEditor = {
             ev.preventDefault();
             plainTextEditor.insertBeforeCursor("\n");
          }     
+
          /**
           * 8 is a key code for 'backspace'
           */
@@ -91,6 +92,7 @@ window.plainTextEditor = {
             ev.preventDefault();
             plainTextEditor.removeBeforeCursor();
          }
+
          /**
          * is a key code for 'del'
          */
@@ -157,7 +159,7 @@ window.plainTextEditor = {
          if(45 === ev.keyCode) {
             ev.preventDefault();
          }
-                   
+
       });
    },
 
@@ -654,6 +656,21 @@ window.plainTextEditor = {
       var selStart = selEnd - this.getSelection().length;
       this._editorHistory.trackReplaceInSel(selStart, selEnd, oldtxt, newtxt);      
       
+   },
+   
+   /**
+   * Aligning to left
+   */
+   alignLeft: function() {
+      this._elQ.css("direction", "ltr");
+   
+   },
+   
+   /**
+   * Aligning to right
+   */
+   alignRight: function() {
+      this._elQ.css("direction", "rtl");
    }
    
 };
