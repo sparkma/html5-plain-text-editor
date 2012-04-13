@@ -389,8 +389,10 @@ window.plainTextEditor = {
     */
    removeBeforeCursor: function() {
       var cursorPos = this.getCursorPos();
-      this.setSelection(cursorPos-1,cursorPos);
-      window.getSelection().getRangeAt(0).deleteContents();
+      if(0 != cursorPos) {
+         this.setSelection(cursorPos-1,cursorPos);
+         this.deleteSelected();
+      }
    },
 
    /**
@@ -430,7 +432,8 @@ window.plainTextEditor = {
       this.copy();
       this.focusEl();
       var content = this.getSelection();
-      window.getSelection().getRangeAt(0).deleteContents();
+      
+      this.deleteSelected();
       
       if(arguments.length >= 1 && stopTracking) {
          return;
@@ -440,6 +443,13 @@ window.plainTextEditor = {
       */
       var cursorPos = this.getCursorPos();
       this._editorHistory.trackCut(cursorPos, content);
+   },
+   
+   deleteSelected: function() {
+      var sel = this.getSelection();
+      if(null !== sel && sel.length > 0) {
+         window.getSelection().getRangeAt(0).deleteContents();
+      }
    },
    
    /**
