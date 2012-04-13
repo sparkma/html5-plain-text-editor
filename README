@@ -1,8 +1,18 @@
 HTML5 Plain Text Editor 
 =======================
 
-built with contentediable and HTML5 DOM Ranges
+Built with contentediable and HTML5 DOM Ranges.  
 
+
+Browser's target audience: 
+
+ * Firefox 
+ 
+ * Chrome 
+ 
+ * Safari
+
+ 
 Features:
 
 * Get/Set text
@@ -20,6 +30,7 @@ Features:
 * Replace, Replace All, Replace in Selection.
 
 * cut, copy, paste
+
 
 Upcoming features:
 

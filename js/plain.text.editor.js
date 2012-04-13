@@ -71,8 +71,9 @@ window.plainTextEditor = {
    * Attaches general document handlers
    */
    attachDocumentHdlrs : function() {
+
       $(document).keypress(function(ev) {
-                  console.log(ev);
+
          if(!plainTextEditor._elQ || !plainTextEditor._elQ.is(":focus")) {
             return;
          }
@@ -80,7 +81,8 @@ window.plainTextEditor = {
          /**
           * 13 is a key code for 'enter'
           */
-         if(13 == ev.which) {
+         var enterKeyCode = 13;
+         if(enterKeyCode == ev.which) {
             ev.preventDefault();
             plainTextEditor.insertBeforeCursor("\n");
          }     
@@ -88,7 +90,8 @@ window.plainTextEditor = {
          /**
           * 8 is a key code for 'backspace'
           */
-         if(8 == ev.which) {
+         var backspaceKeyCode = 8;
+         if(backspaceKeyCode == ev.which) {
             ev.preventDefault();
             plainTextEditor.removeBeforeCursor();
          }
@@ -96,7 +99,8 @@ window.plainTextEditor = {
          /**
          * is a key code for 'del'
          */
-         if(46 === ev.keyCode && !ev.shiftKey) {
+         var deleteKeyCode = 46;
+         if(deleteKeyCode === ev.keyCode && !ev.shiftKey) {
             ev.preventDefault();
             var cursorPos = plainTextEditor.getCursorPos();
             if(cursorPos+1 <= plainTextEditor.getText().length) {
@@ -104,11 +108,19 @@ window.plainTextEditor = {
                plainTextEditor.removeBeforeCursor();
             }
          }
-         
+         /**
+          * shift + del
+          */
+         if(deleteKeyCode === ev.keyCode && ev.shiftKey) {
+            ev.preventDefault();
+            plainTextEditor.cut();
+         }         
+
          /**
           * ctrl + a
           */
-         if(97 === ev.which && ev.ctrlKey) {
+         var aKeyCode = 97;
+         if(aKeyCode === ev.which && ev.ctrlKey) {
             ev.preventDefault();
             plainTextEditor.setSelection(0, plainTextEditor.getText().length-1);
          }
@@ -116,7 +128,8 @@ window.plainTextEditor = {
          /**
          * ctrl + c
          */
-         if(99 === ev.which && ev.ctrlKey) {
+         var cKeyCode = 99;
+         if(cKeyCode === ev.which && ev.ctrlKey) {
             ev.preventDefault();
             plainTextEditor.copy();
          }
@@ -124,7 +137,8 @@ window.plainTextEditor = {
          /**
          * ctrl + v
          */
-         if(118 === ev.which && ev.ctrlKey) {
+         var vKeyCode = 118;
+         if(vKeyCode === ev.which && ev.ctrlKey) {
             ev.preventDefault();
             plainTextEditor.paste();
          }
@@ -132,15 +146,8 @@ window.plainTextEditor = {
          /**
           * ctrl + x
           */
-         if(120 === ev.which && ev.ctrlKey) {
-            ev.preventDefault();
-            plainTextEditor.cut();
-         }
-          
-         /**
-          * shift + del
-          */
-         if(46 === ev.keyCode && ev.shiftKey) {
+         var xKeyCode = 120;
+         if(xKeyCode === ev.which && ev.ctrlKey) {
             ev.preventDefault();
             plainTextEditor.cut();
          }
@@ -148,15 +155,15 @@ window.plainTextEditor = {
          /**
           * shift + ins
           */
-         if(45 === ev.keyCode && ev.shiftKey) {
+         var insKeyCode = 45;
+         if(insKeyCode === ev.keyCode && ev.shiftKey) {
             ev.preventDefault();
             plainTextEditor.paste();
-         }
-         
+         }         
          /**
           * ins, disabled
           */       
-         if(45 === ev.keyCode) {
+         if(insKeyCode === ev.keyCode) {
             ev.preventDefault();
          }
 

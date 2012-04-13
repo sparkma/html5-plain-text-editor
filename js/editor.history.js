@@ -54,6 +54,12 @@ editorHistory = {
       }
    },
    
+   trackActionBackspace: function(posStart, posEnd, content) {
+   },
+   
+   trackActionDelete: function(posStart, posEnd, content) {
+   },
+   
    trackTypeAction: function(character, cursorPos) {
 
       this._actions.push({ _type: "Type",
