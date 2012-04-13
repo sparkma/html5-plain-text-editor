@@ -102,11 +102,7 @@ window.plainTextEditor = {
          var deleteKeyCode = 46;
          if(deleteKeyCode === ev.keyCode && !ev.shiftKey) {
             ev.preventDefault();
-            var cursorPos = plainTextEditor.getCursorPos();
-            if(cursorPos+1 <= plainTextEditor.getText().length) {
-               plainTextEditor.setCursorPos(cursorPos + 1);
-               plainTextEditor.removeBeforeCursor();
-            }
+            plainTextEditor.removeAfterCursor()
          }
          /**
           * shift + del
@@ -254,6 +250,8 @@ window.plainTextEditor = {
    * end pos (excluding endPos)
    */
    setSelection: function(startPos, endPos) {
+     this.focusEl();
+     
      if(arguments.length < 2) {
       return null;
      }
@@ -273,28 +271,52 @@ window.plainTextEditor = {
      * Checking type of node
      */
      var TEXT_NODE = 3;
-     if(startNode.nodeType != TEXT_NODE
-         || endNode.nodeType != TEXT_NODE) {     
+     
+     if( startNode.nodeType != TEXT_NODE 
+         || startPos >= startNode.nodeValue.length
+         || endNode.nodeType != TEXT_NODE
+         || endPos >= endNode.nodeValue.length ) {
+        
+        endNode = null;
+        startNode = null;
         /**
         * in case it isn't a text find 
         * text node from element
         */
         var childNodes = this._elQ.get(0).childNodes;
         var positionCounter = 0;
+        var tempContent = "";
         for(var index in childNodes) {
-         
+        
          var currentNode = childNodes[index];
          if(currentNode.nodeType == TEXT_NODE) {
-            /**
-            * set correct text node
-            */
-               startNode = currentNode;
-               endNode = currentNode;
-            
+               tempContent += currentNode.nodeValue;
+               /**
+                * set correct text node
+                */
+               if(startPos < tempContent.length && startNode === null) {
+                  startNode = currentNode;
+                  /**
+                  * updating startPos
+                  */
+                  var offset = tempContent.length - currentNode.nodeValue.length;
+                  startPos = startPos - offset;
+               }
+               if(endPos < tempContent.length && endNode === null) {
+                  endNode = currentNode;
+                  /**
+                  * updating endPos
+                  */
+                  var offset = tempContent.length - currentNode.nodeValue.length;
+                  endPos = endPos - offset;
+               }
          }      
         }
      }
      
+     if(endNode === null || startNode === null) {
+      return;
+     }
      
      r.setStart(startNode, startPos);
      r.setEnd(endNode, endPos);
@@ -304,8 +326,6 @@ window.plainTextEditor = {
      var selection = window.getSelection();
      
      selection.addRange(r);
-     
-     this.focusEl();
    },
    
    /**
@@ -385,9 +405,16 @@ window.plainTextEditor = {
    },
    
    /**
-    * An analog of backspace button
+    * An analog of backspace button 
+    * acting without selection
     */
    removeBeforeCursor: function() {
+      this.focusEl();
+      if(this.getSelection().length > 0) {
+         this.deleteSelected();
+         return;
+      }
+      
       var cursorPos = this.getCursorPos();
       if(0 != cursorPos) {
          this.setSelection(cursorPos-1,cursorPos);
@@ -395,6 +422,27 @@ window.plainTextEditor = {
       }
    },
 
+   /**
+    * An analog of del button
+    * acting without selection
+    */
+   removeAfterCursor: function() {
+      this.focusEl();
+      if(this.getSelection().length > 0) {
+         this.deleteSelected();
+         return;
+      }
+      
+      var selStartPos = this.getCursorPos();
+      var maxPos = this.getText().length - 1; 
+      var selEndPos = selStartPos + 1;
+      if( selEndPos <= maxPos ) {
+         this.setSelection( selStartPos, selEndPos );
+         this.deleteSelected();
+      }
+   },
+
+   
    /**
    * Undo last action. Currently is under construction
    */
@@ -448,7 +496,7 @@ window.plainTextEditor = {
    deleteSelected: function() {
       var sel = this.getSelection();
       if(null !== sel && sel.length > 0) {
-         window.getSelection().getRangeAt(0).deleteContents();
+         window.getSelection().getRangeAt(0).deleteContents();         
       }
    },
    
