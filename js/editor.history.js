@@ -196,4 +196,5 @@ editorHistory = {
       this._pte._clipboard = action._clipboard;
       this._pte.paste(true);
    }
+   
 };
