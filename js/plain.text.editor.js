@@ -64,7 +64,9 @@ window.plainTextEditor = {
       * History tracking object with undo/redo operations
       */
       
-      this._editorHistory = editorHistory.init(this);      
+      this._editorHistory = editorHistory.init(this);
+
+      this.setCursorPos(0);
    },
    
    /**
@@ -118,9 +120,31 @@ window.plainTextEditor = {
          var aKeyCode = 97;
          if(aKeyCode === ev.which && ev.ctrlKey) {
             ev.preventDefault();
-            plainTextEditor.setSelection(0, plainTextEditor.getText().length-1);
+            plainTextEditor.setSelection(0, plainTextEditor.getText().length - 1);
          }
-          
+         
+         /**
+          * ctrl + y
+          */
+         var yKeyCode = 121;
+         if(yKeyCode === ev.which && ev.ctrlKey) {
+            ev.preventDefault();
+            plainTextEditor.redo();
+         }
+         
+         /**
+          * ctrl + z
+          */
+         var zKeyCode = 122;
+         if(zKeyCode === ev.which && ev.ctrlKey) {
+            ev.preventDefault();
+            plainTextEditor.undo();
+         }
+         
+         
+         console.log(ev.which);
+         
+         
          /**
          * ctrl + c
          */
@@ -258,7 +282,7 @@ window.plainTextEditor = {
      
      if(startPos > endPos
          || startPos < 0
-         || endPos > this.getText().length) {
+         || endPos > this.getText().length ) {
       return null;
      }    
      
@@ -302,7 +326,7 @@ window.plainTextEditor = {
                   var offset = tempContent.length - currentNode.nodeValue.length;
                   startPos = startPos - offset;
                }
-               if(endPos < tempContent.length && endNode === null) {
+               if(endPos <= tempContent.length && endNode === null) {
                   endNode = currentNode;
                   /**
                   * updating endPos
@@ -399,7 +423,7 @@ window.plainTextEditor = {
       }
       
       range.collapse(false);
-      var position = range.startOffset;
+      var position = this.getCursorPos();
       
       var elVal = this._elQ.text();
       var newContent = elVal.slice(0, position) 
@@ -592,7 +616,7 @@ window.plainTextEditor = {
       var txt = this._findTxt;
       var content = this.getText();
       
-      var startPos = content.lastIndexOf(txt, (this._findNext - txt.length -1));
+      var startPos = content.lastIndexOf(txt, (this._findNext - txt.length));
       
       this.setSelection(startPos, startPos+txt.length);
       if(startPos > -1) {

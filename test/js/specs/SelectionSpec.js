@@ -90,9 +90,10 @@ describe('selection-spec', function(){
       /**
       * selection last word of the content
       */
-      pte.setSelection( _content.length - lastWordInContent.length,
-                        _content.length );
+      pte.setSelection( _content.length - lastWordInContent.length ,
+                        _content.length);
       selTxt = pte.getSelection();
+      
       expect(selTxt).toBe(lastWordInContent);
       expect(selTxt).not.toBe(emptyStr);
    });
