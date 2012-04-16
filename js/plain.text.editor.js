@@ -616,7 +616,7 @@ window.plainTextEditor = {
       var txt = this._findTxt;
       var content = this.getText();
       
-      var startPos = content.lastIndexOf(txt, (this._findNext - txt.length));
+      var startPos = content.lastIndexOf(txt, (this._findNext - txt.length - 1));
       
       this.setSelection(startPos, startPos+txt.length);
       if(startPos > -1) {
