@@ -46,12 +46,23 @@ editorHistory = {
             return;
          }
          
+         /**
+         * enter
+         */
          if(13 == ev.which) {
             chr = "\n";
          }
          
+         /**
+         * backspace, del
+         */
+         if(46 == ev.keyCode || 8 == ev.which) {
+            return;
+         }
+         
          this.trackTypeAction(chr, cursorPos);
       }
+      
    },
    
    trackActionBackspace: function(content, cursorPos) {
@@ -208,14 +219,28 @@ editorHistory = {
    },
    
    stepForwardActionBackspace: function(action) {
+      var startPos = action._cursorPos - action._content.length;
+      var endPos = action._cursorPos;
+      
+      this._pte.setSelection(startPos, endPos);
+      this._pte.deleteSelected();
    },
    
    stepBackActionBackspace: function(action) {
+      this._pte.setCursorPos(action._cursorPos - action._content.length);
+      this._pte.insertBeforeCursor(action._content);   
    },
    
-   stepForwardActionDelete: function(action) {
+   stepForwardActionDelete: function(action) {      
+      var startPos = action._cursorPos - action._content.length;
+      var endPos = action._cursorPos;
+      
+      this._pte.setSelection(startPos, endPos);
+      this._pte.deleteSelected();
    },
    
    stepBackActionDelete: function(action) {
+      this._pte.setCursorPos(action._cursorPos - action._content.length);
+      this._pte.insertBeforeCursor(action._content);   
    }
 };

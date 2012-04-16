@@ -454,7 +454,7 @@ window.plainTextEditor = {
             var sel = this.getSelection();
             var cp = this.getCursorPos();
             this._editorHistory.trackActionBackspace(sel, cp);
-         }         
+         }
          /**
           * actually removing
           */
@@ -468,6 +468,14 @@ window.plainTextEditor = {
          * setting the selection
          */
          this.setSelection(cursorPos-1,cursorPos);
+         /**
+          * adding to history
+          */      
+          if(arguments.length > 0 && addToHistory) {
+             var sel = this.getSelection();
+             var cp = this.getCursorPos();
+             this._editorHistory.trackActionBackspace(sel, cp);
+          }            
          /**
           * actually deleting
           */
