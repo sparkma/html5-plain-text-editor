@@ -95,7 +95,8 @@ window.plainTextEditor = {
          var backspaceKeyCode = 8;
          if(backspaceKeyCode == ev.which) {
             ev.preventDefault();
-            plainTextEditor.removeBeforeCursor();
+            var historyTracking = true;
+            plainTextEditor.removeBeforeCursor(historyTracking);
          }
 
          /**
@@ -104,8 +105,10 @@ window.plainTextEditor = {
          var deleteKeyCode = 46;
          if(deleteKeyCode === ev.keyCode && !ev.shiftKey) {
             ev.preventDefault();
-            plainTextEditor.removeAfterCursor()
+            var historyTracking = true;
+            plainTextEditor.removeAfterCursor(historyTracking);
          }
+         
          /**
           * shift + del
           */
@@ -140,11 +143,7 @@ window.plainTextEditor = {
             ev.preventDefault();
             plainTextEditor.undo();
          }
-         
-         
-         console.log(ev.which);
-         
-         
+                  
          /**
          * ctrl + c
          */
@@ -444,16 +443,34 @@ window.plainTextEditor = {
     * An analog of backspace button 
     * acting without selection
     */
-   removeBeforeCursor: function() {
+   removeBeforeCursor: function(addToHistory) {
       this.focusEl();
+      
       if(this.getSelection().length > 0) {
+         /**
+          * adding to history
+          */      
+         if(arguments.length > 0 && addToHistory) {
+            var sel = this.getSelection();
+            var cp = this.getCursorPos();
+            this._editorHistory.trackActionBackspace(sel, cp);
+         }         
+         /**
+          * actually removing
+          */
          this.deleteSelected();
          return;
       }
       
       var cursorPos = this.getCursorPos();
       if(0 != cursorPos) {
+         /**
+         * setting the selection
+         */
          this.setSelection(cursorPos-1,cursorPos);
+         /**
+          * actually deleting
+          */
          this.deleteSelected();
       }
    },
@@ -462,9 +479,21 @@ window.plainTextEditor = {
     * An analog of del button
     * acting without selection
     */
-   removeAfterCursor: function() {
+   removeAfterCursor: function(addToHistory) {
       this.focusEl();
+      
       if(this.getSelection().length > 0) {
+         /**
+          * adding to history
+          */      
+         if(arguments.length > 0 && addToHistory) {
+            var sel = this.getSelection();
+            var cp = this.getCursorPos();
+            this._editorHistory.trackActionDelete(sel, cp);
+         }
+         /**
+         * removing
+         */
          this.deleteSelected();
          return;
       }
@@ -473,7 +502,21 @@ window.plainTextEditor = {
       var maxPos = this.getText().length - 1; 
       var selEndPos = selStartPos + 1;
       if( selEndPos <= maxPos ) {
+         /**
+          * setting the selection
+          */
          this.setSelection( selStartPos, selEndPos );
+         /**
+          * adding to history
+          */      
+         if(arguments.length > 0 && addToHistory) {
+            var sel = this.getSelection();
+            var cp = this.getCursorPos();
+            this._editorHistory.trackActionDelete(sel, cp);
+         }
+         /**
+          * actually deleting
+          */
          this.deleteSelected();
       }
    },

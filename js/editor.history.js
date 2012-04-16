@@ -54,10 +54,20 @@ editorHistory = {
       }
    },
    
-   trackActionBackspace: function(posStart, posEnd, content) {
+   trackActionBackspace: function(content, cursorPos) {
+
+      this._actions.push({ _type: "ActionBackspace",
+                           _content: content,
+                           _cursorPos: cursorPos } );
+
    },
    
-   trackActionDelete: function(posStart, posEnd, content) {
+   trackActionDelete: function(content, cursorPos) {
+
+      this._actions.push({ _type: "ActionDelete",
+                           _content: content,
+                           _cursorPos: cursorPos } );
+   
    },
    
    trackTypeAction: function(character, cursorPos) {
@@ -195,6 +205,17 @@ editorHistory = {
       this._pte.setCursorPos(action._cursorPos);
       this._pte._clipboard = action._clipboard;
       this._pte.paste(true);
-   }
+   },
    
+   stepForwardActionBackspace: function(action) {
+   },
+   
+   stepBackActionBackspace: function(action) {
+   },
+   
+   stepForwardActionDelete: function(action) {
+   },
+   
+   stepBackActionDelete: function(action) {
+   }
 };
