@@ -139,7 +139,7 @@ window.plainTextEditor = {
           * ctrl + z
           */
          var zKeyCode = 122;
-         if(zKeyCode === ev.which && ev.ctrlKey) {
+         if(zKeyCode == ev.which && ev.ctrlKey) {
             ev.preventDefault();
             plainTextEditor.undo();
          }

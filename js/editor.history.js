@@ -56,7 +56,7 @@ editorHistory = {
          /**
          * backspace, del
          */
-         if(46 == ev.keyCode || 8 == ev.which) {
+         if(46 == ev.keyCode || 8 == ev.which || ev.ctrlKey || ev.altKey) {
             return;
          }
          
