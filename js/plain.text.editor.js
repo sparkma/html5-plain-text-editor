@@ -344,15 +344,27 @@ window.plainTextEditor = {
    getCursorPos: function() {
       this.focusEl();
       var range = window.getSelection().getRangeAt(0);
-      return range.endOffset;
+      
+      var container = range.endContainer.previousSibling;
+      var cursorPos = range.endOffset;
+      var TEXT_NODE = 3;
+      
+      while(container !== null) {
+         if(container.nodeType == TEXT_NODE) {
+            cursorPos += container.nodeValue.length;
+         }
+         container = container.previousSibling;
+      }
+      
+      
+      return cursorPos;
    },
 
    /**
    * Set cursor to position, position is calculated from zero
    */
    setCursorPos: function(position) {
-      this.setSelection(position, position);
-      this.focusEl();
+      this.setSelection(position, position);      
    },
    
    /**
@@ -495,8 +507,14 @@ window.plainTextEditor = {
    
    deleteSelected: function() {
       var sel = this.getSelection();
+      var cp = this.getCursorPos();
       if(null !== sel && sel.length > 0) {
-         window.getSelection().getRangeAt(0).deleteContents();         
+         var newCp = cp - sel.length;
+         window.getSelection().getRangeAt(0).deleteContents();
+         /**
+         * overriding a cursor position
+         */
+         this.setCursorPos(newCp);
       }
    },
    
