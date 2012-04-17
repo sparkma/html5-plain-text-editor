@@ -65,15 +65,142 @@ window.plainTextEditor = {
       */
       
       this._editorHistory = editorHistory.init(this);
-
+      
+      this._isCapitilized = false;
+      
       this.setCursorPos(0);
+   },
+   
+   attachDocumentHdlrs: function() {
+      
+      $(document).keypress(function(ev) {
+         var s = String.fromCharCode(ev.which);
+         if( 0 != ev.which ) {
+            plainTextEditor._isCapitilized = s.toLowerCase() != s;
+         }
+      });
+      
+      $(document).keydown(function(ev) {
+
+         if(!plainTextEditor._elQ || !plainTextEditor._elQ.is(":focus")) {
+            return;
+         }
+         
+         /**
+          * 13 is a key code for 'enter'
+          */
+         var enterKeyCode = 13;
+         if(enterKeyCode == ev.which) {
+            ev.preventDefault();
+            plainTextEditor.insertBeforeCursor("\n");
+         }     
+
+         /**
+          * 8 is a key code for 'backspace'
+          */
+         var backspaceKeyCode = 8;
+         if(backspaceKeyCode == ev.which) {
+            ev.preventDefault();
+            var historyTracking = true;
+            plainTextEditor.removeBeforeCursor(historyTracking);
+         }
+
+         /**
+         * is a key code for 'del'
+         */
+         var deleteKeyCode = 46;
+         if(deleteKeyCode === ev.keyCode && !ev.shiftKey) {
+            ev.preventDefault();
+            var historyTracking = true;
+            plainTextEditor.removeAfterCursor(historyTracking);
+         }
+         
+         /**
+          * shift + del
+          */
+         if(deleteKeyCode === ev.keyCode && ev.shiftKey) {
+            ev.preventDefault();
+            plainTextEditor.cut();
+         }         
+
+         /**
+          * ctrl + a
+          */
+         var aKeyCode = 65;
+         if(aKeyCode === ev.which && ev.ctrlKey) {
+            ev.preventDefault();
+            plainTextEditor.setSelection(0, plainTextEditor.getText().length - 1);
+         }
+         
+         /**
+          * ctrl + y
+          */
+         var yKeyCode = 89;
+         if(yKeyCode === ev.which && ev.ctrlKey) {
+            ev.preventDefault();
+            plainTextEditor.redo();
+         }
+         
+         /**
+          * ctrl + z
+          */
+         var zKeyCode = 90;
+         if(zKeyCode == ev.which && ev.ctrlKey) {            
+            ev.preventDefault();
+            plainTextEditor.undo();
+            
+         }
+                  
+         /**
+         * ctrl + c
+         */
+         var cKeyCode = 67;
+         if(cKeyCode === ev.which && ev.ctrlKey) {
+            ev.preventDefault();
+            plainTextEditor.copy();
+         }
+         
+         /**
+         * ctrl + v
+         */
+         var vKeyCode = 86;
+         if(vKeyCode === ev.which && ev.ctrlKey) {
+            ev.preventDefault();
+            plainTextEditor.paste();
+         }
+         
+         /**
+          * ctrl + x
+          */
+         var xKeyCode = 88;
+         if(xKeyCode === ev.which && ev.ctrlKey) {
+            ev.preventDefault();
+            plainTextEditor.cut();
+         }
+         
+         /**
+          * shift + ins
+          */
+         var insKeyCode = 45;
+         if(insKeyCode === ev.keyCode && ev.shiftKey) {
+            ev.preventDefault();
+            plainTextEditor.paste();
+         }         
+         /**
+          * ins, disabled
+          */       
+         if(insKeyCode === ev.keyCode) {
+            ev.preventDefault();
+         }
+
+      });
    },
    
    /**
    * Attaches general document handlers
    */
-   attachDocumentHdlrs : function() {
-
+   attachDocumentHdlrs2 : function() {
+      
       $(document).keypress(function(ev) {
 
          if(!plainTextEditor._elQ || !plainTextEditor._elQ.is(":focus")) {
@@ -139,9 +266,10 @@ window.plainTextEditor = {
           * ctrl + z
           */
          var zKeyCode = 122;
-         if(zKeyCode == ev.which && ev.ctrlKey) {
+         if(zKeyCode == ev.which && ev.ctrlKey) {            
             ev.preventDefault();
             plainTextEditor.undo();
+            
          }
                   
          /**

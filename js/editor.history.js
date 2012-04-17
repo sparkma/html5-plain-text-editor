@@ -23,25 +23,30 @@ editorHistory = {
       this._pte = plainTextEditor;
       this.bindHandlers();
       
+      this._actions = [];
+      
       return this;
    },
   
    bindHandlers: function() {
       var _editorHistory = this;
       
-      $(document).keypress(function(ev) {
-         _editorHistory.keyPressHandler(ev);         
+      $(document).keydown(function(ev) {
+         _editorHistory.keyDownHandler(ev);         
       });
+      
+     
       
    },   
    
-   keyPressHandler: function(ev) {
+   keyDownHandler: function(ev) {
       
       if(this._pte._elQ.is(":focus")) {
       
          var cursorPos = this._pte.getCursorPos();
             
          var chr = String.fromCharCode(ev.which);
+
          if("" == chr || null === chr || chr.length == 0) {
             return;
          }
@@ -58,6 +63,17 @@ editorHistory = {
          */
          if(46 == ev.keyCode || 8 == ev.which || ev.ctrlKey || ev.altKey) {
             return;
+         }
+         
+         
+         /**
+         * case sensitivity
+         */
+         if(plainTextEditor._isCapitilized) {
+            chr = chr.toUpperCase(chr);
+         }
+         else {
+           chr = chr.toLowerCase(chr);
          }
          
          this.trackTypeAction(chr, cursorPos);
