@@ -81,6 +81,15 @@ editorHistory = {
       
    },
    
+   trackOverwriteSelection: function(selContent, newContent, cursorPos) {
+
+      this._actions.push({ _type: "OverwriteSelection",
+                           _selContent: selContent,
+                           _newContent: newContent,
+                           _cursorPos: cursorPos } );
+   
+   },
+   
    trackActionBackspace: function(content, cursorPos) {
 
       this._actions.push({ _type: "ActionBackspace",
@@ -258,5 +267,31 @@ editorHistory = {
    stepBackActionDelete: function(action) {
       this._pte.setCursorPos(action._cursorPos - action._content.length);
       this._pte.insertBeforeCursor(action._content);   
+   },
+   
+   stepForwardOverwriteSelection: function(action) {
+      var startSel = action._cursorPos - action._selContent.length;
+      var endSel = action._cursorPos;
+      
+      this._pte.setSelection(startSel, endSel);
+      this._pte.deleteSelected();
+      alert(action._newContent);
+      this._pte.insertBeforeCursor(action._newContent);
+   },
+
+   /**
+   * The action holds following:
+   *  _selContent
+   *  _newContent
+   *  _cursorPos 
+   */
+   stepBackOverwriteSelection: function(action) {
+      
+      var startSel = action._cursorPos - action._selContent.length;
+      var endSel = startSel + action._newContent.length;
+      
+      this._pte.setSelection(startSel, endSel);
+      this._pte.deleteSelected();
+      this._pte.insertBeforeCursor(action._selContent);
    }
 };

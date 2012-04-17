@@ -78,6 +78,20 @@ window.plainTextEditor = {
          if( 0 != ev.which ) {
             plainTextEditor._isCapitilized = s.toLowerCase() != s;
          }
+         
+         if( plainTextEditor._elQ 
+             && plainTextEditor._elQ.is(":focus")
+             && plainTextEditor.getSelection().length > 0 
+             && 0 != ev.which 
+             && 5 != ev.which
+             && String.fromCharCode(ev.keyCode).length > 0 ) {
+
+            var sel = plainTextEditor.getSelection();
+            var newCont = String.fromCharCode(ev.which);
+            var pos = plainTextEditor.getCursorPos();
+            plainTextEditor._editorHistory.trackOverwriteSelection(sel, newCont, pos);
+            
+         }
       });
       
       $(document).keydown(function(ev) {
@@ -85,7 +99,7 @@ window.plainTextEditor = {
          if(!plainTextEditor._elQ || !plainTextEditor._elQ.is(":focus")) {
             return;
          }
-         
+                  
          /**
           * 13 is a key code for 'enter'
           */
