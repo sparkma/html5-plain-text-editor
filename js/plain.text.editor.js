@@ -140,8 +140,7 @@ window.plainTextEditor = {
          /**
           * ctrl + a
           */
-         var aKeyCode = 65;
-         if(aKeyCode === ev.which && ev.ctrlKey) {
+         if("a" == String.fromCharCode(ev.which).toLowerCase() && ev.ctrlKey) {
             ev.preventDefault();
             plainTextEditor.setSelection(0, plainTextEditor.getText().length - 1);
          }
@@ -149,8 +148,7 @@ window.plainTextEditor = {
          /**
           * ctrl + y
           */
-         var yKeyCode = 89;
-         if(yKeyCode === ev.which && ev.ctrlKey) {
+         if("y" == String.fromCharCode(ev.which).toLowerCase() && ev.ctrlKey) {
             ev.preventDefault();
             plainTextEditor.redo();
          }
@@ -158,8 +156,7 @@ window.plainTextEditor = {
          /**
           * ctrl + z
           */
-         var zKeyCode = 90;
-         if(zKeyCode == ev.which && ev.ctrlKey) {            
+         if("z" == String.fromCharCode(ev.which).toLowerCase()  && ev.ctrlKey) {            
             ev.preventDefault();
             plainTextEditor.undo();
             
@@ -168,8 +165,7 @@ window.plainTextEditor = {
          /**
          * ctrl + c
          */
-         var cKeyCode = 67;
-         if(cKeyCode === ev.which && ev.ctrlKey) {
+         if("c" == String.fromCharCode(ev.which).toLowerCase() && ev.ctrlKey) {
             ev.preventDefault();
             plainTextEditor.copy();
          }
@@ -177,8 +173,7 @@ window.plainTextEditor = {
          /**
          * ctrl + v
          */
-         var vKeyCode = 86;
-         if(vKeyCode === ev.which && ev.ctrlKey) {
+         if("v" == String.fromCharCode(ev.which).toLowerCase()  && ev.ctrlKey) {
             ev.preventDefault();
             plainTextEditor.paste();
          }
@@ -186,8 +181,7 @@ window.plainTextEditor = {
          /**
           * ctrl + x
           */
-         var xKeyCode = 88;
-         if(xKeyCode === ev.which && ev.ctrlKey) {
+         if("x" == String.fromCharCode(ev.which).toLowerCase()  && ev.ctrlKey) {
             ev.preventDefault();
             plainTextEditor.cut();
          }
@@ -210,127 +204,6 @@ window.plainTextEditor = {
       });
    },
    
-   /**
-   * Attaches general document handlers
-   */
-   attachDocumentHdlrs2 : function() {
-      
-      $(document).keypress(function(ev) {
-
-         if(!plainTextEditor._elQ || !plainTextEditor._elQ.is(":focus")) {
-            return;
-         }
-         
-         /**
-          * 13 is a key code for 'enter'
-          */
-         var enterKeyCode = 13;
-         if(enterKeyCode == ev.which) {
-            ev.preventDefault();
-            plainTextEditor.insertBeforeCursor("\n");
-         }     
-
-         /**
-          * 8 is a key code for 'backspace'
-          */
-         var backspaceKeyCode = 8;
-         if(backspaceKeyCode == ev.which) {
-            ev.preventDefault();
-            var historyTracking = true;
-            plainTextEditor.removeBeforeCursor(historyTracking);
-         }
-
-         /**
-         * is a key code for 'del'
-         */
-         var deleteKeyCode = 46;
-         if(deleteKeyCode === ev.keyCode && !ev.shiftKey) {
-            ev.preventDefault();
-            var historyTracking = true;
-            plainTextEditor.removeAfterCursor(historyTracking);
-         }
-         
-         /**
-          * shift + del
-          */
-         if(deleteKeyCode === ev.keyCode && ev.shiftKey) {
-            ev.preventDefault();
-            plainTextEditor.cut();
-         }         
-
-         /**
-          * ctrl + a
-          */
-         var aKeyCode = 97;
-         if(aKeyCode === ev.which && ev.ctrlKey) {
-            ev.preventDefault();
-            plainTextEditor.setSelection(0, plainTextEditor.getText().length - 1);
-         }
-         
-         /**
-          * ctrl + y
-          */
-         var yKeyCode = 121;
-         if(yKeyCode === ev.which && ev.ctrlKey) {
-            ev.preventDefault();
-            plainTextEditor.redo();
-         }
-         
-         /**
-          * ctrl + z
-          */
-         var zKeyCode = 122;
-         if(zKeyCode == ev.which && ev.ctrlKey) {            
-            ev.preventDefault();
-            plainTextEditor.undo();
-            
-         }
-                  
-         /**
-         * ctrl + c
-         */
-         var cKeyCode = 99;
-         if(cKeyCode === ev.which && ev.ctrlKey) {
-            ev.preventDefault();
-            plainTextEditor.copy();
-         }
-         
-         /**
-         * ctrl + v
-         */
-         var vKeyCode = 118;
-         if(vKeyCode === ev.which && ev.ctrlKey) {
-            ev.preventDefault();
-            plainTextEditor.paste();
-         }
-         
-         /**
-          * ctrl + x
-          */
-         var xKeyCode = 120;
-         if(xKeyCode === ev.which && ev.ctrlKey) {
-            ev.preventDefault();
-            plainTextEditor.cut();
-         }
-         
-         /**
-          * shift + ins
-          */
-         var insKeyCode = 45;
-         if(insKeyCode === ev.keyCode && ev.shiftKey) {
-            ev.preventDefault();
-            plainTextEditor.paste();
-         }         
-         /**
-          * ins, disabled
-          */       
-         if(insKeyCode === ev.keyCode) {
-            ev.preventDefault();
-         }
-
-      });
-   },
-
    /**
    * Returns full text inside current 
    * element without HTML formatting
