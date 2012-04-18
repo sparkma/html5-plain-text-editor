@@ -203,11 +203,19 @@ editorHistory = {
    },
    
    stepBackReplaceAll: function(action) {
-      this._pte.replaceAll(action._newStr, action._oldStr, true);
+      var cp = this._pte.getCursorPos();
+      
+      this._pte.setText(action._oldStr);
+      
+      this._pte.setCursorPos(cp);
    },
 
    stepForwardReplaceAll: function(action) {
-      this._pte.replaceAll(action._oldStr, action._newStr, true);
+       var cp = this._pte.getCursorPos();
+      
+      this._pte.setText(action._newStr);
+      
+      this._pte.setCursorPos(cp);
    },
 
    stepBackReplaceInSel: function(action) {

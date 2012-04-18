@@ -907,6 +907,8 @@ window.plainTextEditor = {
       }
       var cp = this.getCursorPos();
       
+      var originalTxt = this.getText();
+      
       var securedOldTxt = oldtxt.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
       var regex = new RegExp(securedOldTxt, "g");
       var content = this.getText();
@@ -921,7 +923,7 @@ window.plainTextEditor = {
       /**
        * Adding an action to history
        */
-      this._editorHistory.trackReplaceAll(oldtxt, newtxt);      
+      this._editorHistory.trackReplaceAll(originalTxt, this.getText());      
    },
    
    /**
