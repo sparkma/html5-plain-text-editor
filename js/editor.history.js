@@ -130,16 +130,6 @@ editorHistory = {
                            
    },
 
-   trackReplaceInSel: function(startSel, endSel, oldStr, newStr) {
-
-      this._actions.push({ _type: "ReplaceInSel",
-                           _startSel: startSel,
-                           _endSel: endSel,
-                           _oldStr: oldStr,
-                           _newStr: newStr });
-
-   },
-
    trackCut: function(cursorPos, str) {
 
       this._actions.push({ _type: "Cut",
@@ -216,18 +206,6 @@ editorHistory = {
       this._pte.setText(action._newStr);
       
       this._pte.setCursorPos(cp);
-   },
-
-   stepBackReplaceInSel: function(action) {
-      this._pte.setSelection(action._startSel, action._endSel);
-      this._pte.replaceInSel(action._newStr, action._oldStr, true);
-      action._endSel = this._pte.getCursorPos();
-   },
-
-   stepForwardReplaceInSel: function(action) {
-      this._pte.setSelection(action._startSel, action._endSel);
-      this._pte.replaceInSel(action._oldStr, action._newStr, true);
-      action._endSel = this._pte.getCursorPos();
    },
 
    stepBackCut: function(action) {

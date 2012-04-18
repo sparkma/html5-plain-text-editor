@@ -809,6 +809,8 @@ window.plainTextEditor = {
       }
       var cp = this.getCursorPos();
       
+      var originalTxt = this.getText();
+      
       var securedOldTxt = oldtxt.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
       var regex = new RegExp(securedOldTxt, "g");
       var content = this.getSelection();
@@ -827,9 +829,8 @@ window.plainTextEditor = {
       /**
        * Adding an action to history
        */
-      var selEnd = this.getCursorPos();
-      var selStart = selEnd - this.getSelection().length;
-      this._editorHistory.trackReplaceInSel(selStart, selEnd, oldtxt, newtxt);      
+
+      this._editorHistory.trackReplaceAll(originalTxt, this.getText());      
       
    },
    
