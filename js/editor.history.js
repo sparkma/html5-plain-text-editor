@@ -275,7 +275,7 @@ editorHistory = {
       
       this._pte.setSelection(startSel, endSel);
       this._pte.deleteSelected();
-      alert(action._newContent);
+      
       this._pte.insertBeforeCursor(action._newContent);
    },
 
