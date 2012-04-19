@@ -67,7 +67,8 @@ describe('undo-redo-spec', function(){
       pte.bindToElem(el);
       
       var akey = 65;
-      var keyDownEv = $.Event('keydown', { keyCode: akey, which: akey }) ;
+      var keyDownEv = $.Event('keydown', { keyCode: akey, which: akey, charCode: akey }) ;
+      var keyPressEv = $.Event('keypress', { keyCode: akey, which: akey, charCode: akey }) ;
       
       /**
       * Event occurs for PlainTextEditor, 
@@ -76,12 +77,13 @@ describe('undo-redo-spec', function(){
       * remains the same
       */
       $(document).trigger( keyDownEv );
+      $(document).trigger( keyPressEv );
       
       
       
       var txt = pte.undo();
       var txt = pte.redo();
-      var changedContent = "a'est \n tres belle";
+      var changedContent = "A'est \n tres belle";
       
       var txt = pte.getText();
       
