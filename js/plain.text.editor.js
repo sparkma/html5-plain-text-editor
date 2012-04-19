@@ -65,20 +65,14 @@ window.plainTextEditor = {
       */
       
       this._editorHistory = editorHistory.init(this);
-      
-      this._isCapitilized = false;
-      
+            
       this.setCursorPos(0);
    },
    
    attachDocumentHdlrs: function() {
       
       $(document).keypress(function(ev) {
-         var s = String.fromCharCode(ev.which);
-         if( 0 != ev.which ) {
-            plainTextEditor._isCapitilized = s.toLowerCase() != s;
-         }
-         
+       
          if( plainTextEditor._elQ 
              && plainTextEditor._elQ.is(":focus")
              && plainTextEditor.getSelection().length > 0 
@@ -91,6 +85,10 @@ window.plainTextEditor = {
             var pos = plainTextEditor.getCursorPos();
             plainTextEditor._editorHistory.trackOverwriteSelection(sel, newCont, pos);
             
+         }
+         
+         if(ev.ctrlKey && plainTextEditor._elQ && plainTextEditor._elQ.is(":focus")) {
+            ev.preventDefault();
          }
       });
       

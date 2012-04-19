@@ -8,7 +8,7 @@ editorHistory = {
    /**
    * Last action
    */
-   _lastAction: null,
+   _redoActions: [],
    
    /**
     * PlainTextEditor obj associated 
@@ -24,6 +24,7 @@ editorHistory = {
       this.bindHandlers();
       
       this._actions = [];
+      this._redoActions = [];
       
       return this;
    },
@@ -31,7 +32,7 @@ editorHistory = {
    bindHandlers: function() {
       var _editorHistory = this;
       
-      $(document).keydown(function(ev) {
+      $(document).keypress(function(ev) {
          _editorHistory.keyDownHandler(ev);         
       });
       
@@ -45,11 +46,7 @@ editorHistory = {
       
          var cursorPos = this._pte.getCursorPos();
             
-         var chr = String.fromCharCode(ev.which);
-
-         if("" == chr || null === chr || chr.length == 0) {
-            return;
-         }
+         var chr = String.fromCharCode(ev.charCode);
          
          /**
          * enter
@@ -58,22 +55,23 @@ editorHistory = {
             chr = "\n";
          }
          
-         /**
-         * backspace, del
-         */
-         if(46 == ev.keyCode || 8 == ev.which || ev.ctrlKey || ev.altKey) {
+         
+         if(13 != ev.which
+            && ( "" == chr 
+               || null === chr 
+               || chr.length == 0 
+               || chr.charCodeAt(0) < 32 
+               || chr.charCodeAt(0) == 127) ) {
             return;
          }
          
          
+         
          /**
-         * case sensitivity
+         * backspace, del
          */
-         if(plainTextEditor._isCapitilized) {
-            chr = chr.toUpperCase(chr);
-         }
-         else {
-           chr = chr.toLowerCase(chr);
+         if(46 == ev.which || 8 == ev.which || ev.ctrlKey || ev.altKey) {
+            return;
          }
          
          this.trackTypeAction(chr, cursorPos);
@@ -148,19 +146,24 @@ editorHistory = {
 
    stepBack: function() {
       if(this._actions.length > 0) {
-         this._lastAction = this._actions.pop();
-         var methodName = "stepBack" + this._lastAction._type;
-         this[methodName](this._lastAction);         
+         var action = this._actions.pop();
+         
+         var methodName = "stepBack" + action._type;
+         this[methodName](action);
+         console.log(action);
+         console.log(this._actions);
+         this._redoActions.push( action ) ;
       }
    },
 
    stepForward: function() {
-      if(null !== this._lastAction) {
-         var methodName = "stepForward" + this._lastAction._type;
-         this[methodName](this._lastAction);
+      if(this._redoActions.length > 0) {
+         var action = this._redoActions.pop();
+      
+         var methodName = "stepForward" + action._type;
+         this[methodName](action);
          
-         this._actions.push(this._lastAction);
-         this._lastAction = null;
+         this._actions.push(action);         
       }
    },
 
