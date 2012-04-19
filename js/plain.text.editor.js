@@ -72,7 +72,11 @@ window.plainTextEditor = {
    attachDocumentHdlrs: function() {
       
       $(document).keypress(function(ev) {
-       
+         if(ev.ctrlKey && plainTextEditor._elQ && plainTextEditor._elQ.is(":focus")) {
+            ev.preventDefault();
+            return;
+         }
+         
          if( plainTextEditor._elQ 
              && plainTextEditor._elQ.is(":focus")
              && plainTextEditor.getSelection().length > 0 
@@ -87,9 +91,7 @@ window.plainTextEditor = {
             
          }
          
-         if(ev.ctrlKey && plainTextEditor._elQ && plainTextEditor._elQ.is(":focus")) {
-            ev.preventDefault();
-         }
+        
       });
       
       $(document).keydown(function(ev) {
@@ -140,7 +142,7 @@ window.plainTextEditor = {
           */
          if("a" == String.fromCharCode(ev.which).toLowerCase() && ev.ctrlKey) {
             ev.preventDefault();
-            plainTextEditor.setSelection(0, plainTextEditor.getText().length - 1);
+            plainTextEditor.setSelection(0, plainTextEditor.getText().length);
          }
          
          /**
@@ -225,7 +227,14 @@ window.plainTextEditor = {
    * with a new one passed as an argument
    */
    setText: function(formattedTxt) {
-      this._elQ.html(formattedTxt);
+      var tn = document.createTextNode(formattedTxt);
+      
+      var node = this._el;
+      while (node.hasChildNodes()) {
+         node.removeChild(node.lastChild);
+      }
+      node.appendChild(tn); 
+      //this._elQ.text(formattedTxt + "\n");
       this.focusEl();
    }, 
    
@@ -295,6 +304,7 @@ window.plainTextEditor = {
      if(startPos > endPos
          || startPos < 0
          || endPos > this.getText().length ) {
+         
       return null;
      }    
      
@@ -309,9 +319,9 @@ window.plainTextEditor = {
      var TEXT_NODE = 3;
      
      if( startNode.nodeType != TEXT_NODE 
-         || startPos >= startNode.nodeValue.length
+         || startPos > startNode.nodeValue.length
          || endNode.nodeType != TEXT_NODE
-         || endPos >= endNode.nodeValue.length ) {
+         || endPos > endNode.nodeValue.length ) {
         
         endNode = null;
         startNode = null;
@@ -392,6 +402,10 @@ window.plainTextEditor = {
          container = container.previousSibling;
       }
       
+      if(cursorPos >= this.getText().length) {
+         var fixPos = this.getText().length;
+         cursorPos = fixPos;
+      }
       
       return cursorPos;
    },
@@ -400,6 +414,9 @@ window.plainTextEditor = {
    * Set cursor to position, position is calculated from zero
    */
    setCursorPos: function(position) {
+      if(position > this.getText().length) {
+         position = this.getText().length;
+      }
       this.setSelection(position, position);      
    },
    
@@ -437,13 +454,14 @@ window.plainTextEditor = {
       range.collapse(false);
       var position = this.getCursorPos();
       
-      var elVal = this._elQ.text();
+      var elVal = this.getText();
       var newContent = elVal.slice(0, position) 
                         + txt 
                         + elVal.slice(position);
 
-      this._elQ.text(newContent);
-
+      this.setText(newContent);
+      
+      
       
       /**
       * setting new cursor position

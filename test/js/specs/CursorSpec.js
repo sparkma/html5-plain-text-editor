@@ -73,7 +73,7 @@ describe('cursor-spec', function(){
       pte.setCursorPos(9999);
       var pos = pte.getCursorPos();
 
-      expect(pos).toBe(defPos);
+      expect(pos).toBe(_content.length);
    });
    
 });

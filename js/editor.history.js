@@ -145,25 +145,27 @@ editorHistory = {
    },
 
    stepBack: function() {
+   
       if(this._actions.length > 0) {
          var action = this._actions.pop();
          
          var methodName = "stepBack" + action._type;
          this[methodName](action);
-         console.log(action);
-         console.log(this._actions);
+         
          this._redoActions.push( action ) ;
       }
    },
 
    stepForward: function() {
       if(this._redoActions.length > 0) {
-         var action = this._redoActions.pop();
+         var action = this._redoActions[this._redoActions.length -1];
       
          var methodName = "stepForward" + action._type;
          this[methodName](action);
          
-         this._actions.push(action);         
+         
+         this._redoActions = this._redoActions.splice(0, this._redoActions.length - 1);
+         this._actions.push(action);
       }
    },
 
@@ -183,7 +185,7 @@ editorHistory = {
       
       if("\n" == action._character) {
          var pos = this._pte.getCursorPos();
-         this._pte.setCursorPos(pos-1);
+         this._pte.setCursorPos(pos);
       }
    },
 
@@ -265,7 +267,7 @@ editorHistory = {
       this._pte.setSelection(startSel, endSel);
       this._pte.deleteSelected();
       
-      this._pte.insertBeforeCursor(action._newContent);
+     // this._pte.insertBeforeCursor(action._newContent);
    },
 
    /**
