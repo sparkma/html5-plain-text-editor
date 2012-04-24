@@ -40,8 +40,6 @@ describe('cursor-spec', function(){
       
       var pos = pte.getCursorPos();
       expect(pos).toBe(0);
-      
-
    });
    
    it("changes cursor position", function() {
@@ -56,14 +54,12 @@ describe('cursor-spec', function(){
       
       expect(cursorPos).toBe(newPos);
       expect(cursorPos).not.toBe(oldPos);
-      
    });
    
    it("check cursor for out of bound", function() {
       var el = $("#" + _id).get(0);
       pte.bindToElem(el);
-      
-      
+
       var defPos = pte.getCursorPos();
       pte.setCursorPos(-1);
       var pos = pte.getCursorPos();
