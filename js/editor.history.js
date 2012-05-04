@@ -42,7 +42,7 @@ editorHistory = {
    
    keyDownHandler: function(ev) {
       
-      if(this._pte._elQ.is(":focus")) {
+      if(this._pte._elQ.is(":focus") && this._pte.getSelection().length  == 0) {
       
          var cursorPos = this._pte.getCursorPos();
             
@@ -267,7 +267,7 @@ editorHistory = {
       this._pte.setSelection(startSel, endSel);
       this._pte.deleteSelected();
       
-     // this._pte.insertBeforeCursor(action._newContent);
+      this._pte.insertBeforeCursor(action._newContent);
    },
 
    /**
